@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import './styles/index.css'; // index.css가 styles 폴더로 이동
 import App from './App'; // App.js는 src 루트에 그대로 유지
 import reportWebVitals from './services/reportWebVitals'; // reportWebVitals.js가 services 폴더로 이동
+import { AuthProvider } from "./AuthContext";
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
