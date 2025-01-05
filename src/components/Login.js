@@ -3,7 +3,7 @@ import axios from "../util/axiosInstance";
 
 function Login() {
   const [formData, setFormData] = useState({
-    email: "",
+    userId: "",
     password: "",
   });
 
@@ -15,7 +15,7 @@ function Login() {
     e.preventDefault();
     try {
       const response = await axios.post("/v1/auth/login", formData); // API 엔드포인트
-      localStorage.setItem("token", response.data.token); // JWT 토큰 저장
+      localStorage.setItem("token", response.data.data.token); // JWT 토큰 저장
       alert("Login successful!");
     } catch (error) {
       alert("Login failed!");
@@ -27,10 +27,10 @@ function Login() {
       <h2>Login</h2>
       <form onSubmit={handleSubmit}>
         <input
-          type="email"
-          name="email"
+          type="userId"
+          name="userId"
           placeholder="Email"
-          value={formData.email}
+          value={formData.userId}
           onChange={handleChange}
           required
         />
