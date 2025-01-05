@@ -1,0 +1,26 @@
+/* 네비게이션 바 스타일 */
+.navbar {
+    padding: 10px;
+    background-color: #282c34;
+    color: white;
+    display: flex;
+    justify-content: space-around;
+  }
+  
+  /* 일반 링크 스타일 */
+  .link {
+    margin: 10px;
+    text-decoration: none;
+    color: white;
+    font-weight: normal;
+  }
+  
+  /* 활성화된 링크 스타일 */
+  .active-link {
+    margin: 10px;
+    text-decoration: none;
+    color: #61dafb; /* React 로고 색상 */
+    font-weight: bold;
+    border-bottom: 2px solid #61dafb;
+  }
+  

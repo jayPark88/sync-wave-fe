@@ -1,0 +1,40 @@
+/* Signup 페이지 스타일 */
+.signup-container {
+    padding: 20px;
+    max-width: 400px;
+    margin: 0 auto;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .signup-form input {
+    display: block;
+    width: 100%;
+    margin: 10px 0;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  }
+  
+  .signup-form button {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+  }
+  
+  .signup-form button:disabled {
+    background-color: #999;
+    cursor: not-allowed;
+  }
+  
+  .signup-error {
+    color: red;
+    margin-top: 10px;
+  }
+  

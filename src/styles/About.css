@@ -1,0 +1,22 @@
+/* About 페이지의 스타일 */
+.about-container {
+    padding: 20px;
+    text-align: center;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 20px auto;
+    max-width: 600px;
+  }
+  
+  .about-title {
+    font-size: 2em;
+    color: #333;
+  }
+  
+  .about-description {
+    font-size: 1.2em;
+    color: #666;
+    line-height: 1.6;
+  }
+  

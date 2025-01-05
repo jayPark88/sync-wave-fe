@@ -1,0 +1,38 @@
+/* Home 페이지의 스타일 */
+.home-container {
+    padding: 20px;
+    text-align: center;
+    background-color: #f0f8ff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 20px auto;
+    max-width: 600px;
+  }
+  
+  .home-title {
+    font-size: 2.5em;
+    color: #333;
+  }
+  
+  .home-description {
+    font-size: 1.2em;
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 20px;
+  }
+  
+  .home-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 1em;
+    transition: background-color 0.3s ease;
+  }
+  
+  .home-button:hover {
+    background-color: #0056b3;
+  }
+  
