@@ -1,33 +1,41 @@
-// src/pages/Login.js
-import React, { useState } from 'react';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "../util/axiosInstance";
 
-const Login = () => {
-  const [userId, setUserId] = useState('');
-  const [password, setPassword] = useState('');
+const Login = ({ setIsAuthenticated }) => {
+  const [userId, setUserId] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
     try {
-      const response = await axios.post('/v1/auth/login', { userId, password });
-      // 로그인 성공 후 토큰 저장 또는 리다이렉션 처리
-      console.log("로그인 성공:", response.data);
+      const response = await axios.post("/v1/auth/login", { userId, password });
+      const token = response.data.data.token;
+
+      localStorage.setItem("token", token);
+      localStorage.setItem("userEmail", userId);
+      setIsAuthenticated(true); // ✅ 로그인 상태 즉시 반영!
+      navigate("/");
     } catch (error) {
+      setError("Login failed. Please check your credentials.");
       console.error("로그인 실패:", error);
     }
   };
 
   return (
-    <div>
+    <div className="login-container">
       <h2>Login</h2>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="login-form">
         <div>
-          <label>userId:</label><br />
+          <label>User ID:</label><br />
           <input 
             type="email" 
             value={userId} 
             onChange={(e) => setUserId(e.target.value)} 
-            placeholder='email을 입력해주세요.'
+            placeholder="Enter your email"
             required 
           />
         </div>
@@ -42,6 +50,7 @@ const Login = () => {
         </div>
         <button type="submit">Login</button>
       </form>
+      {error && <p style={{ color: "red" }}>{error}</p>}
     </div>
   );
 };
