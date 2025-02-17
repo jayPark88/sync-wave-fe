@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const axiosInstance = axios.create({
-  baseURL: process.env.REACT_APP_API_BASE_URL || "http://localhost:8080", // API의 기본 URL
+  baseURL: process.env.REACT_APP_API_BASE_URL || "http://localhost:8080/service", // API의 기본 URL
   timeout: 5000, // 요청 제한 시간 (5초)
   headers: {
     "Content-Type": "application/json", // JSON 형식의 데이터 요청

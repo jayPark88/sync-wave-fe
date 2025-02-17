@@ -1,50 +1,109 @@
-.App {
-  text-align: center;
-}
+/* App.css */
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+/* 기본 리셋 및 폰트 설정 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
   }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+  
+  body, html {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background-color: #f0f2f5;
+    color: #333;
   }
-  to {
-    transform: rotate(360deg);
+  
+  /* 앱 전체 컨테이너 */
+  .app-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
   }
-}
-
-body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-  background-color: #f4f4f9;
-}
-
-h1 {
-  color: #333;
-}
-
+  
+  /* Header 스타일 */
+  header {
+    background: #343a40;
+    color: #fff;
+    padding: 1rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  header h1 {
+    font-size: 1.5rem;
+  }
+  
+  header nav a {
+    color: #fff;
+    margin-left: 1rem;
+    text-decoration: none;
+    font-size: 1rem;
+  }
+  
+  header nav a:hover {
+    text-decoration: underline;
+  }
+  
+  /* 메인 레이아웃 컨텐츠 */
+  .main-content {
+    flex: 1;
+    display: flex;
+    background-color: #e9ecef;
+  }
+  
+  /* Sidebar (좌측 네비게이션) */
+  aside {
+    width: 220px;
+    background: #fff;
+    border-right: 1px solid #ddd;
+    padding: 1rem;
+  }
+  
+  aside ul {
+    list-style: none;
+  }
+  
+  aside ul li {
+    margin-bottom: 0.75rem;
+  }
+  
+  aside ul li a {
+    text-decoration: none;
+    color: #333;
+    transition: color 0.2s ease;
+  }
+  
+  aside ul li a:hover {
+    color: #007bff;
+  }
+  
+  /* 메인 컨텐츠 영역 */
+  main {
+    flex: 1;
+    padding: 2rem;
+    background: #fff;
+  }
+  
+  /* Footer 스타일 */
+  footer {
+    background: #343a40;
+    color: #fff;
+    padding: 1rem 2rem;
+    text-align: center;
+    font-size: 0.9rem;
+  }
+  
+  /* 반응형 디자인 */
+  @media (max-width: 768px) {
+    .main-content {
+      flex-direction: column;
+    }
+    
+    aside {
+      width: 100%;
+      border-right: none;
+      border-bottom: 1px solid #ddd;
+    }
+  }
+  

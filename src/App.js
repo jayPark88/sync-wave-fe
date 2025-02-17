@@ -1,40 +1,33 @@
-import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { AuthProvider } from "./contexts/AuthContext"; // AuthProvider로 인증 상태 관리
-import Home from "./pages/Home"; // 페이지 컴포넌트
-import About from "./pages/About";
-import Login from "./pages/Login";
-import Signup from "./pages/Signup";
-import Navbar from "./components/common/Navbar"; // 공통 컴포넌트
-import ProtectedRoute from "./components/auth/ProtectedRoute"; // 인증된 사용자만 접근 가능
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Header from './components/Header';
+import Footer from './components/Footer';
+import Sidebar from './components/Sidebar';
+import Home from './pages/Home';
+import Login from './pages/Login';
+import Signup from './pages/Signup';
+import Board from './pages/Board';
+import './styles/App.css';
 
 function App() {
   return (
-    <AuthProvider>
-      {/* Router는 전체 애플리케이션의 라우팅을 관리 */}
-      <Router>
-        <Navbar />
-        <div style={{ padding: "20px" }}>
-          <Routes>
-            {/* 기본 페이지 라우트 */}
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
-            
-            {/* 인증이 필요한 경로 */}
-            <Route
-              path="/protected"
-              element={
-                <ProtectedRoute>
-                  <h2>Protected Page</h2>
-                </ProtectedRoute>
-              }
-            />
-          </Routes>
+    <Router>
+      <div className="app-container" style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+        <Header />
+        <div style={{ flex: 1, display: 'flex' }}>
+          <Sidebar />
+          <main style={{ flex: 1, padding: '20px' }}>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/signup" element={<Signup />} />
+              <Route path="/board" element={<Board />} />
+            </Routes>
+          </main>
         </div>
-      </Router>
-    </AuthProvider>
+        <Footer />
+      </div>
+    </Router>
   );
 }
 

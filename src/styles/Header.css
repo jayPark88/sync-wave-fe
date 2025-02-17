@@ -1,0 +1,50 @@
+/* 헤더 스타일 */
+.header {
+    background: #333;
+    color: #fff;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  /* 네비게이션 스타일 */
+  .nav {
+    display: flex;
+    gap: 10px;
+  }
+  
+  /* 링크 스타일 */
+  .nav-link {
+    color: white;
+    text-decoration: none;
+    padding: 5px 10px;
+    transition: color 0.3s;
+  }
+  
+  .nav-link:hover {
+    color: #61dafb; /* React 기본 색상 */
+  }
+  
+  /* 사용자 정보 스타일 */
+  .user-info {
+    color: white;
+    font-weight: bold;
+    margin-right: 10px;
+  }
+  
+  /* 로그아웃 버튼 스타일 */
+  .logout-button {
+    background-color: #f44336;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .logout-button:hover {
+    background-color: #d32f2f;
+  }
+  
