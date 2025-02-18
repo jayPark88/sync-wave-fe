@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "../util/axiosInstance";
+import "../styles/Login.css"; // ✅ 스타일 파일 추가
 
 const Login = ({ setIsAuthenticated }) => {
   const [userId, setUserId] = useState("");
@@ -17,7 +18,7 @@ const Login = ({ setIsAuthenticated }) => {
 
       localStorage.setItem("token", token);
       localStorage.setItem("userEmail", userId);
-      setIsAuthenticated(true); // ✅ 로그인 상태 즉시 반영!
+      setIsAuthenticated(true);
       navigate("/");
     } catch (error) {
       setError("Login failed. Please check your credentials.");
@@ -27,30 +28,44 @@ const Login = ({ setIsAuthenticated }) => {
 
   return (
     <div className="login-container">
-      <h2>Login</h2>
-      <form onSubmit={handleSubmit} className="login-form">
-        <div>
-          <label>User ID:</label><br />
-          <input 
-            type="email" 
-            value={userId} 
-            onChange={(e) => setUserId(e.target.value)} 
-            placeholder="Enter your email"
-            required 
-          />
+      <div className="login-card">
+        <h2>Login to SyncWave</h2>
+        <p className="login-subtitle">Please enter your credentials to access your account.</p>
+        
+        <form onSubmit={handleSubmit} className="login-form">
+          <div className="input-group">
+            <label>Email</label>
+            <input
+              type="email"
+              value={userId}
+              onChange={(e) => setUserId(e.target.value)}
+              placeholder="Enter your email"
+              required
+            />
+          </div>
+          
+          <div className="input-group">
+            <label>Password</label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Enter your password"
+              required
+            />
+          </div>
+
+          {error && <p className="login-error">{error}</p>}
+
+          <button type="submit" className="login-button">Login</button>
+        </form>
+
+        <div className="login-links">
+          <a href="/forgot-password">Forgot Password?</a>
+          <span> | </span>
+          <a href="/signup">Sign Up</a>
         </div>
-        <div>
-          <label>Password:</label><br />
-          <input 
-            type="password" 
-            value={password} 
-            onChange={(e) => setPassword(e.target.value)} 
-            required 
-          />
-        </div>
-        <button type="submit">Login</button>
-      </form>
-      {error && <p style={{ color: "red" }}>{error}</p>}
+      </div>
     </div>
   );
 };
