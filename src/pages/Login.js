@@ -21,7 +21,7 @@ const Login = ({ setIsAuthenticated }) => {
       setIsAuthenticated(true);
       navigate("/");
     } catch (error) {
-      setError("Login failed. Please check your credentials.");
+      setError("로그인에 실패했습니다. 아이디와 비밀번호를 확인해주세요.");
       console.error("로그인 실패:", error);
     }
   };
@@ -29,41 +29,41 @@ const Login = ({ setIsAuthenticated }) => {
   return (
     <div className="login-container">
       <div className="login-card">
-        <h2>Login to SyncWave</h2>
-        <p className="login-subtitle">Please enter your credentials to access your account.</p>
+        <h2>SyncWave 로그인</h2>
+        <p className="login-subtitle">계정 정보를 입력하여 로그인하세요.</p>
         
         <form onSubmit={handleSubmit} className="login-form">
           <div className="input-group">
-            <label>Email</label>
+            <label>이메일</label>
             <input
               type="email"
               value={userId}
               onChange={(e) => setUserId(e.target.value)}
-              placeholder="Enter your email"
+              placeholder="이메일을 입력하세요"
               required
             />
           </div>
           
           <div className="input-group">
-            <label>Password</label>
+            <label>비밀번호</label>
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="Enter your password"
+              placeholder="비밀번호를 입력하세요"
               required
             />
           </div>
 
           {error && <p className="login-error">{error}</p>}
 
-          <button type="submit" className="login-button">Login</button>
+          <button type="submit" className="login-button">로그인</button>
         </form>
 
         <div className="login-links">
-          <a href="/forgot-password">Forgot Password?</a>
+          <a href="/forgot-password">비밀번호를 잊으셨나요?</a>
           <span> | </span>
-          <a href="/signup">Sign Up</a>
+          <a href="/signup">회원가입</a>
         </div>
       </div>
     </div>

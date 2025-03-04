@@ -30,7 +30,11 @@ const App = () => {
           {isAuthenticated && <Sidebar />}
           <main style={{ flex: 1, padding: "20px" }}>
             <Routes>
-              <Route path="/login" element={<Login setIsAuthenticated={setIsAuthenticated} />} />
+              {/* ✅ 로그인 상태면 /login 접근 시 /로 리디렉트 */}
+              <Route
+                path="/login"
+                element={isAuthenticated ? <Navigate to="/" replace /> : <Login setIsAuthenticated={setIsAuthenticated} />}
+              />
               <Route path="/signup" element={<Signup />} />
 
               {/* 보호된 페이지 */}
