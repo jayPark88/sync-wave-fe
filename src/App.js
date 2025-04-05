@@ -8,6 +8,8 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Board from "./pages/Board";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
+import PasswordResetPage from "./pages/PasswordResetPage";
+
 import "./styles/App.css";
 
 const App = () => {
@@ -36,6 +38,7 @@ const App = () => {
                 element={isAuthenticated ? <Navigate to="/" replace /> : <Login setIsAuthenticated={setIsAuthenticated} />}
               />
               <Route path="/signup" element={<Signup />} />
+              <Route path="/password/reset" element={<PasswordResetPage />} />
 
               {/* 보호된 페이지 */}
               <Route element={<ProtectedRoute />}>

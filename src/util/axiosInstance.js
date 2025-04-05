@@ -34,7 +34,7 @@ axiosInstance.interceptors.response.use(
       console.error(
         `API Error: ${error.response.status} - ${error.response.data.message}`
       );
-      alert(error.response.data.message || "An error occurred.");
+      alert(error.response.data.message || "로그인에 실패했습니다.");
     } else if (error.request) {
       // 서버가 응답하지 않은 경우
       console.error("No response received from the server.");

@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "../util/axiosInstance";
-import "../styles/Login.css"; // ✅ 스타일 파일 추가
+import ForgotPasswordPopup from "../components/ForgotPasswordPopup";
+import "../styles/Login.css";
 
 const Login = ({ setIsAuthenticated }) => {
   const [userId, setUserId] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [showPopup, setShowPopup] = useState(false); // ✅ 내부로 이동
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -31,7 +33,7 @@ const Login = ({ setIsAuthenticated }) => {
       <div className="login-card">
         <h2>SyncWave 로그인</h2>
         <p className="login-subtitle">계정 정보를 입력하여 로그인하세요.</p>
-        
+
         <form onSubmit={handleSubmit} className="login-form">
           <div className="input-group">
             <label>이메일</label>
@@ -43,7 +45,7 @@ const Login = ({ setIsAuthenticated }) => {
               required
             />
           </div>
-          
+
           <div className="input-group">
             <label>비밀번호</label>
             <input
@@ -61,11 +63,20 @@ const Login = ({ setIsAuthenticated }) => {
         </form>
 
         <div className="login-links">
-          <a href="/forgot-password">비밀번호를 잊으셨나요?</a>
+          {/* ✅ 팝업 트리거 */}
+          <span
+            onClick={() => setShowPopup(true)}
+            style={{ cursor: "pointer", color: "#007bff", textDecoration: "underline" }}
+          >
+            비밀번호를 잊으셨나요?
+          </span>
           <span> | </span>
           <a href="/signup">회원가입</a>
         </div>
       </div>
+
+      {/* ✅ 팝업 표시 조건 */}
+      {showPopup && <ForgotPasswordPopup onClose={() => setShowPopup(false)} />}
     </div>
   );
 };
