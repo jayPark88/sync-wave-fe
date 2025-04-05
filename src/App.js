@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import Header from "./components/Header";
-import Footer from "./components/Footer";
-import Sidebar from "./components/Sidebar";
+import Header from "./components/common/Header";
+import Footer from "./components/common/Footer";
+import Sidebar from "./components/common/Sidebar";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Board from "./pages/Board";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import PasswordResetPage from "./pages/PasswordResetPage";
+import LoadingOverlay from "./components/common/LoadingOverlay"; // ✅ 경로 맞게
+import { LoadingProvider } from "./contexts/LoadingContext";
 
 import "./styles/App.css";
 
@@ -25,7 +27,9 @@ const App = () => {
   }, []);
 
   return (
+  <LoadingProvider>
     <Router>
+    <LoadingOverlay /> {/* ✅ 반드시 여기에 있어야 함 */}
       <div className="app-container" style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
         {isAuthenticated && <Header isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} />}
         <div style={{ flex: 1, display: "flex" }}>
@@ -54,6 +58,7 @@ const App = () => {
         {isAuthenticated && <Footer />}
       </div>
     </Router>
+    /</LoadingProvider>
   );
 };
 

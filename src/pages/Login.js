@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "../util/axiosInstance";
 import ForgotPasswordPopup from "../components/ForgotPasswordPopup";
+import { useLoading } from "../contexts/LoadingContext"; // ✅ 전역 로딩
 import "../styles/Login.css";
 
 const Login = ({ setIsAuthenticated }) => {
@@ -9,9 +10,11 @@ const Login = ({ setIsAuthenticated }) => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [showPopup, setShowPopup] = useState(false); // ✅ 내부로 이동
+  const { setIsLoading } = useLoading(); // ✅ 전역 상태 사용
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
+    setIsLoading(true); // 화면 전체 로딩 ON
     e.preventDefault();
     setError("");
     try {
@@ -25,6 +28,8 @@ const Login = ({ setIsAuthenticated }) => {
     } catch (error) {
       setError("로그인에 실패했습니다. 아이디와 비밀번호를 확인해주세요.");
       console.error("로그인 실패:", error);
+    } finally {
+      setIsLoading(false); // 로딩 OFF
     }
   };
 

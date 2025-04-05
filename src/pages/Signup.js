@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "../util/axiosInstance";
 import "../styles/Signup.css"; // CSS 파일 추가
+import { useLoading } from "../contexts/LoadingContext"; // ✅ 전역 로딩
 
 const Signup = () => {
   const [userName, setUserName] = useState("");
@@ -10,10 +11,12 @@ const Signup = () => {
   const [nickName, setNickName] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const { setIsLoading } = useLoading(); // ✅ 전역 상태 사용
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      setIsLoading(true); // 화면 전체 로딩 ON
       const response = await axios.post("/v1/user/signUp", {
         userName,
         email,
@@ -29,6 +32,8 @@ const Signup = () => {
     } catch (error) {
       console.error("회원가입 오류:", error);
       alert("회원가입에 실패했습니다. 다시 시도해주세요.");
+    } finally {
+      setIsLoading(false); // 로딩 OFF
     }
   };
 

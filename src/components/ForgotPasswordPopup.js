@@ -1,15 +1,14 @@
-// components/ForgotPasswordPopup.js
 import React, { useState } from "react";
+import { useLoading } from "../contexts/LoadingContext"; // ✅ 전역 로딩
 import axios from "../util/axiosInstance";
-import "../styles/Modal.css"; // 기존 스타일
-import "../styles/LoadingOverlay.css"; // ✅ 로딩 오버레이 스타일
+import "../styles/Modal.css";
 
 const ForgotPasswordPopup = ({ onClose }) => {
   const [email, setEmail] = useState("");
-  const [isLoading, setIsLoading] = useState(false); // ✅ 전체 로딩 상태
+  const { setIsLoading } = useLoading(); // ✅ 전역 상태 사용
 
   const handleSendEmail = async () => {
-    setIsLoading(true);
+    setIsLoading(true); // 화면 전체 로딩 ON
     try {
       await axios.post(
         "http://localhost:8080/service/v1/auth/password-reset/email",
@@ -22,18 +21,12 @@ const ForgotPasswordPopup = ({ onClose }) => {
       console.error("이메일 전송 실패:", err);
       alert("이메일 전송에 실패했습니다. 다시 시도해주세요.");
     } finally {
-      setIsLoading(false);
+      setIsLoading(false); // 로딩 OFF
     }
   };
 
   return (
     <div className="modal-overlay">
-      {isLoading && (
-        <div className="loading-overlay">
-          <div className="spinner" />
-        </div>
-      )}
-
       <div className="modal">
         <h3 style={{ marginBottom: "10px" }}>비밀번호 재설정</h3>
         <p style={{ marginBottom: "16px", fontSize: "14px" }}>
@@ -47,8 +40,8 @@ const ForgotPasswordPopup = ({ onClose }) => {
           required
         />
         <div className="modal-buttons">
-          <button onClick={onClose} disabled={isLoading}>취소</button>
-          <button onClick={handleSendEmail} disabled={isLoading}>확인</button>
+          <button onClick={onClose}>취소</button>
+          <button onClick={handleSendEmail}>확인</button>
         </div>
       </div>
     </div>

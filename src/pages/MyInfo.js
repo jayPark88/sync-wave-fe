@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import axios from "../util/axiosInstance";
 import { AuthContext } from "../contexts/AuthContext";
+import { useLoading } from "../contexts/LoadingContext"; // ✅ 전역 로딩
 import "../styles/MyInfo.css"; // 스타일 파일 추가
 
 const MyInfo = () => {
@@ -11,6 +12,7 @@ const MyInfo = () => {
     nickName: "",
     phone: "",
   });
+  const { setIsLoading } = useLoading(); // ✅ 전역 상태 사용
 
   const [message, setMessage] = useState("");
 
@@ -34,12 +36,15 @@ const MyInfo = () => {
 
   // 정보 수정 요청
   const handleSubmit = async (e) => {
+    setIsLoading(true); // 화면 전체 로딩 ON
     e.preventDefault();
     try {
       await axios.put("/v1/user/my-info", formData);
       setMessage("Profile updated successfully!");
     } catch (error) {
       setMessage("Failed to update profile. Please try again.");
+    } finally {
+      setIsLoading(false); // 로딩 OFF
     }
   };
 

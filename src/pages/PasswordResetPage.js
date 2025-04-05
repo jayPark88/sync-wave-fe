@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import axios from "../util/axiosInstance";
+import { useLoading } from "../contexts/LoadingContext"; // ✅ 전역 로딩
 import "../styles/ResetPassword.css"; // 새 스타일 추가
 
 const PasswordResetPage = () => {
@@ -9,6 +10,7 @@ const PasswordResetPage = () => {
   const token = searchParams.get("token");
   const navigate = useNavigate();
   const [newPassword, setNewPassword] = useState("");
+  const { setIsLoading } = useLoading(); // ✅ 전역 상태 사용
 
   useEffect(() => {
     if (!token) {
@@ -19,6 +21,7 @@ const PasswordResetPage = () => {
 
   const handleReset = async () => {
     try {
+      setIsLoading(true); // 화면 전체 로딩 ON
       await axios.post("http://localhost:8080/service/v1/auth/password-reset", {
         password: newPassword,
         token: token,
@@ -28,6 +31,8 @@ const PasswordResetPage = () => {
     } catch (err) {
       console.error("비밀번호 재설정 실패:", err);
       alert("비밀번호 변경에 실패했습니다. 다시 시도해주세요.");
+    } finally {
+      setIsLoading(false); // 로딩 OFF
     }
   };
 
