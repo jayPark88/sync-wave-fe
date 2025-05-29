@@ -34,7 +34,15 @@ axiosInstance.interceptors.response.use(
       console.error(
         `API Error: ${error.response.status} - ${error.response.data.message}`
       );
-      alert(error.response.data.message || "로그인에 실패했습니다.");
+      if(error.response.data.errorCode === 'FAIL_401'){
+        alert("로그인 후 사용 가능합니다.");
+        return Promise.reject(error);
+      }else if(error.response.data.errorCode === 'FAIL_403'){
+        alert("권한이 없습니다.");
+        window.location.href = "/"; // 홈 페이지로 리다이렉트
+      }else{
+        alert("API 요청에 실패했습니다. 다시 시도해주세요.");
+      }
     } else if (error.request) {
       // 서버가 응답하지 않은 경우
       console.error("No response received from the server.");
@@ -44,7 +52,6 @@ axiosInstance.interceptors.response.use(
       console.error("Error setting up request:", error.message);
       alert("An unexpected error occurred. Please try again.");
     }
-    return Promise.reject(error); // 에러를 호출한 곳으로 전달
   }
 );
 
