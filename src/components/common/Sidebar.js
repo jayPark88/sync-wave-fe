@@ -1,13 +1,30 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
+import '../../styles/Sidebar.css';
 
 const Sidebar = () => {
+  const location = useLocation();
+
+  const isActive = (path) => {
+    return location.pathname === path;
+  };
+
   return (
-    <aside style={{ width: '200px', background: '#f4f4f4', padding: '10px' }}>
-      <ul style={{ listStyle: 'none', padding: 0 }}>
-        <li><Link to="/">Home</Link></li>
-        <li><Link to="/todos">To-Do List</Link></li>
-      </ul>
+    <aside className="sidebar">
+      <nav className="sidebar-nav">
+        <ul>
+          <li className="nav-item">
+            <Link to="/" className={`nav-link ${isActive('/') ? 'active' : ''}`}>
+              홈
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Link to="/todos" className={`nav-link ${isActive('/todos') ? 'active' : ''}`}>
+              할 일 목록
+            </Link>
+          </li>
+        </ul>
+      </nav>
     </aside>
   );
 };

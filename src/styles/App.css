@@ -1,109 +1,149 @@
 /* App.css */
 
-/* 기본 리셋 및 폰트 설정 */
+@import './variables.css';
+
+/* Reset & Base Styles */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  color: var(--color-text-primary);
+  background-color: var(--color-background-secondary);
+  line-height: 1.5;
+}
+
+/* Layout */
+.app-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-container {
+  display: flex;
+  flex: 1;
+  margin-top: var(--header-height);
+}
+
+.content-container {
+  flex: 1;
+  padding: var(--spacing-lg);
+  max-width: var(--container-max-width);
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* Sidebar */
+.sidebar {
+  width: var(--sidebar-width);
+  background-color: var(--color-background);
+  border-right: 1px solid var(--color-border);
+  height: calc(100vh - var(--header-height));
+  position: fixed;
+  top: var(--header-height);
+  left: 0;
+  overflow-y: auto;
+  padding: var(--spacing-md);
+  transition: transform 0.3s ease;
+}
+
+/* Content area with sidebar */
+.content-with-sidebar {
+  margin-left: var(--sidebar-width);
+  width: calc(100% - var(--sidebar-width));
+}
+
+/* Common Components */
+.card {
+  background-color: var(--color-background);
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-sm);
+  padding: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
+}
+
+.button {
+  background-color: var(--color-primary);
+  color: var(--color-secondary);
+  border: none;
+  border-radius: var(--border-radius-md);
+  padding: var(--spacing-sm) var(--spacing-lg);
+  font-size: var(--font-size-md);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.button:hover {
+  background-color: #EBD400;
+}
+
+.button.secondary {
+  background-color: var(--color-background);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-primary);
+}
+
+.button.secondary:hover {
+  background-color: var(--color-background-secondary);
+}
+
+/* Form Elements */
+.input-field {
+  width: 100%;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-md);
+  font-size: var(--font-size-md);
+  transition: border-color 0.2s ease;
+}
+
+.input-field:focus {
+  outline: none;
+  border-color: var(--color-primary);
+}
+
+/* Typography */
+h1 {
+  font-size: var(--font-size-xxl);
+  margin-bottom: var(--spacing-lg);
+  color: var(--color-text-primary);
+}
+
+h2 {
+  font-size: var(--font-size-xl);
+  margin-bottom: var(--spacing-md);
+  color: var(--color-text-primary);
+}
+
+h3 {
+  font-size: var(--font-size-lg);
+  margin-bottom: var(--spacing-md);
+  color: var(--color-text-primary);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .sidebar {
+    transform: translateX(-100%);
+    z-index: 1000;
   }
-  
-  body, html {
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    background-color: #f0f2f5;
-    color: #333;
+
+  .sidebar.open {
+    transform: translateX(0);
   }
-  
-  /* 앱 전체 컨테이너 */
-  .app-container {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
+
+  .content-with-sidebar {
+    margin-left: 0;
+    width: 100%;
   }
-  
-  /* Header 스타일 */
-  header {
-    background: #343a40;
-    color: #fff;
-    padding: 1rem 2rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+
+  .content-container {
+    padding: var(--spacing-md);
   }
-  
-  header h1 {
-    font-size: 1.5rem;
-  }
-  
-  header nav a {
-    color: #fff;
-    margin-left: 1rem;
-    text-decoration: none;
-    font-size: 1rem;
-  }
-  
-  header nav a:hover {
-    text-decoration: underline;
-  }
-  
-  /* 메인 레이아웃 컨텐츠 */
-  .main-content {
-    flex: 1;
-    display: flex;
-    background-color: #e9ecef;
-  }
-  
-  /* Sidebar (좌측 네비게이션) */
-  aside {
-    width: 220px;
-    background: #fff;
-    border-right: 1px solid #ddd;
-    padding: 1rem;
-  }
-  
-  aside ul {
-    list-style: none;
-  }
-  
-  aside ul li {
-    margin-bottom: 0.75rem;
-  }
-  
-  aside ul li a {
-    text-decoration: none;
-    color: #333;
-    transition: color 0.2s ease;
-  }
-  
-  aside ul li a:hover {
-    color: #007bff;
-  }
-  
-  /* 메인 컨텐츠 영역 */
-  main {
-    flex: 1;
-    padding: 2rem;
-    background: #fff;
-  }
-  
-  /* Footer 스타일 */
-  footer {
-    background: #343a40;
-    color: #fff;
-    padding: 1rem 2rem;
-    text-align: center;
-    font-size: 0.9rem;
-  }
-  
-  /* 반응형 디자인 */
-  @media (max-width: 768px) {
-    .main-content {
-      flex-direction: column;
-    }
-    
-    aside {
-      width: 100%;
-      border-right: none;
-      border-bottom: 1px solid #ddd;
-    }
-  }
+}
   

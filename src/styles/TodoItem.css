@@ -1,0 +1,170 @@
+@import './variables.css';
+
+.todo-item {
+  background: var(--color-background);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-md);
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s ease;
+  border: 1px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.todo-item:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.todo-checkbox {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid var(--color-border);
+  cursor: pointer;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.todo-checkbox.checked {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.todo-checkbox.checked::after {
+  content: '✓';
+  position: absolute;
+  color: white;
+  font-size: 12px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.todo-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.todo-task {
+  font-size: var(--font-size-md);
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-xs);
+  transition: all 0.2s ease;
+}
+
+.todo-task.completed {
+  text-decoration: line-through;
+  color: var(--color-text-tertiary);
+}
+
+.todo-dates {
+  display: flex;
+  gap: var(--spacing-md);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.todo-date {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.date-label {
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  min-width: 60px;
+}
+
+.todo-status {
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--border-radius-sm);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+}
+
+.todo-actions {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+.todo-button {
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border: none;
+  border-radius: var(--border-radius-sm);
+  font-size: var(--font-size-sm);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: none;
+  color: var(--color-text-secondary);
+}
+
+.todo-button:hover {
+  background-color: var(--color-background-secondary);
+  color: var(--color-text-primary);
+}
+
+.todo-button.delete:hover {
+  background-color: var(--color-error-alpha);
+  color: var(--color-error);
+}
+
+/* 상태별 스타일 */
+.status-pending {
+  background-color: var(--color-background-secondary);
+  color: var(--color-text-secondary);
+}
+
+.status-in-progress {
+  background-color: var(--color-primary-alpha);
+  color: var(--color-primary);
+}
+
+.status-completed {
+  background-color: var(--color-success-alpha);
+  color: var(--color-success);
+}
+
+.status-cancelled {
+  background-color: var(--color-text-tertiary);
+  color: white;
+}
+
+/* 애니메이션 */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.todo-item {
+  animation: slideIn 0.3s ease;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  .todo-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-sm);
+  }
+
+  .todo-dates {
+    flex-direction: column;
+    gap: var(--spacing-xs);
+  }
+
+  .todo-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+} 

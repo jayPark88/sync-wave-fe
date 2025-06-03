@@ -1,48 +1,51 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "../util/axiosInstance";
 import ForgotPasswordPopup from "../components/ForgotPasswordPopup";
-import { useLoading } from "../contexts/LoadingContext"; // ✅ 전역 로딩
+import { useLoading } from "../contexts/LoadingContext";
+import { AuthContext } from "../contexts/AuthContext";
 import "../styles/Login.css";
 
 const Login = ({ setIsAuthenticated }) => {
   const [userId, setUserId] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [showPopup, setShowPopup] = useState(false); // ✅ 내부로 이동
-  const { setIsLoading } = useLoading(); // ✅ 전역 상태 사용
+  const [showPopup, setShowPopup] = useState(false);
+  const { setIsLoading } = useLoading();
+  const { login } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
-    setIsLoading(true); // 화면 전체 로딩 ON
     e.preventDefault();
+    setIsLoading(true);
     setError("");
+    
     try {
-      const response = await axios.post("/v1/auth/login", { userId, password });
-      const token = response.data.data.token;
-
-      localStorage.setItem("token", token);
-      localStorage.setItem("userEmail", userId);
-      setIsAuthenticated(true);
-      navigate("/");
+      const success = await login(userId, password);
+      if (success) {
+        setIsAuthenticated(true);
+        navigate("/");
+      } else {
+        setError("로그인에 실패했습니다. 아이디와 비밀번호를 확인해주세요.");
+      }
     } catch (error) {
-      setError("로그인에 실패했습니다. 아이디와 비밀번호를 확인해주세요.");
       console.error("로그인 실패:", error);
+      setError("로그인에 실패했습니다. 아이디와 비밀번호를 확인해주세요.");
     } finally {
-      setIsLoading(false); // 로딩 OFF
+      setIsLoading(false);
     }
   };
 
   return (
     <div className="login-container">
       <div className="login-card">
-        <h2>SyncWave 로그인</h2>
-        <p className="login-subtitle">계정 정보를 입력하여 로그인하세요.</p>
+        <h2>SyncWave</h2>
+        <p className="login-subtitle">간편하게 로그인하고 시작하세요</p>
 
         <form onSubmit={handleSubmit} className="login-form">
           <div className="input-group">
-            <label>이메일</label>
+            <label htmlFor="email">이메일</label>
             <input
+              id="email"
               type="email"
               value={userId}
               onChange={(e) => setUserId(e.target.value)}
@@ -52,8 +55,9 @@ const Login = ({ setIsAuthenticated }) => {
           </div>
 
           <div className="input-group">
-            <label>비밀번호</label>
+            <label htmlFor="password">비밀번호</label>
             <input
+              id="password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -64,23 +68,18 @@ const Login = ({ setIsAuthenticated }) => {
 
           {error && <p className="login-error">{error}</p>}
 
-          <button type="submit" className="login-button">로그인</button>
+          <button type="submit" className="login-button">
+            로그인
+          </button>
         </form>
 
         <div className="login-links">
-          {/* ✅ 팝업 트리거 */}
-          <span
-            onClick={() => setShowPopup(true)}
-            style={{ cursor: "pointer", color: "#007bff", textDecoration: "underline" }}
-          >
-            비밀번호를 잊으셨나요?
-          </span>
-          <span> | </span>
+          <span onClick={() => setShowPopup(true)}>비밀번호 찾기</span>
+          <span> · </span>
           <a href="/signup">회원가입</a>
         </div>
       </div>
 
-      {/* ✅ 팝업 표시 조건 */}
       {showPopup && <ForgotPasswordPopup onClose={() => setShowPopup(false)} />}
     </div>
   );

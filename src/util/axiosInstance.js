@@ -28,30 +28,7 @@ axiosInstance.interceptors.response.use(
     return response; // 성공적인 응답은 그대로 반환
   },
   (error) => {
-    // 에러 처리 공통 로직
-    if (error.response) {
-      // 서버가 응답을 반환한 경우
-      console.error(
-        `API Error: ${error.response.status} - ${error.response.data.message}`
-      );
-      if(error.response.data.errorCode === 'FAIL_401'){
-        alert("로그인 후 사용 가능합니다.");
-        return Promise.reject(error);
-      }else if(error.response.data.errorCode === 'FAIL_403'){
-        alert("권한이 없습니다.");
-        window.location.href = "/"; // 홈 페이지로 리다이렉트
-      }else{
-        alert("API 요청에 실패했습니다. 다시 시도해주세요.");
-      }
-    } else if (error.request) {
-      // 서버가 응답하지 않은 경우
-      console.error("No response received from the server.");
-      alert("No response from the server. Please try again later.");
-    } else {
-      // 요청 설정 중 에러가 발생한 경우
-      console.error("Error setting up request:", error.message);
-      alert("An unexpected error occurred. Please try again.");
-    }
+    return Promise.reject(error);
   }
 );
 

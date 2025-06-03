@@ -27,7 +27,7 @@ function TodoForm({ onSubmit, initial = {} }) {
       <input
         type="text"
         className="todo-input todo-input--text"
-        placeholder="할 일 입력"
+        placeholder="새로운 할 일을 입력하세요"
         value={task}
         onChange={e => setTask(e.target.value)}
         required

@@ -10,6 +10,7 @@ const Signup = () => {
   const [phone, setPhone] = useState("");
   const [nickName, setNickName] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const navigate = useNavigate();
   const { setIsLoading } = useLoading(); // ✅ 전역 상태 사용
 
@@ -31,7 +32,7 @@ const Signup = () => {
       }
     } catch (error) {
       console.error("회원가입 오류:", error);
-      alert("회원가입에 실패했습니다. 다시 시도해주세요.");
+      setError("회원가입에 실패했습니다. 입력하신 정보를 다시 확인해주세요.");
     } finally {
       setIsLoading(false); // 로딩 OFF
     }
@@ -39,55 +40,82 @@ const Signup = () => {
 
   return (
     <div className="signup-container">
-      <h2 className="signup-title">회원가입</h2>
-      <form onSubmit={handleSubmit} className="signup-form">
-        <div className="form-group">
-          <label>이름</label>
-          <input
-            type="text"
-            value={userName}
-            onChange={(e) => setUserName(e.target.value)}
-            required
-          />
+      <div className="signup-card">
+        <h2 className="signup-title">SyncWave</h2>
+        <p className="signup-subtitle">새로운 계정 만들기</p>
+        
+        <form onSubmit={handleSubmit} className="signup-form">
+          <div className="form-group">
+            <label htmlFor="userName">이름</label>
+            <input
+              id="userName"
+              type="text"
+              value={userName}
+              onChange={(e) => setUserName(e.target.value)}
+              placeholder="이름을 입력하세요"
+              required
+            />
+          </div>
+          
+          <div className="form-group">
+            <label htmlFor="email">이메일</label>
+            <input
+              id="email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="이메일을 입력하세요"
+              required
+            />
+          </div>
+          
+          <div className="form-group">
+            <label htmlFor="phone">전화번호</label>
+            <input
+              id="phone"
+              type="tel"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              placeholder="전화번호를 입력하세요"
+              required
+            />
+          </div>
+          
+          <div className="form-group">
+            <label htmlFor="nickName">닉네임</label>
+            <input
+              id="nickName"
+              type="text"
+              value={nickName}
+              onChange={(e) => setNickName(e.target.value)}
+              placeholder="닉네임을 입력하세요"
+              required
+            />
+          </div>
+          
+          <div className="form-group">
+            <label htmlFor="password">비밀번호</label>
+            <input
+              id="password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="비밀번호를 입력하세요"
+              required
+            />
+          </div>
+
+          {error && <p className="login-error">{error}</p>}
+          
+          <button type="submit" className="signup-btn">
+            회원가입
+          </button>
+        </form>
+
+        <div className="signup-links">
+          이미 계정이 있으신가요? <a href="/login">로그인</a>
         </div>
-        <div className="form-group">
-          <label>이메일</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label>전화번호</label>
-          <input
-            type="tel"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label>닉네임</label>
-          <input
-            type="text"
-            value={nickName}
-            onChange={(e) => setNickName(e.target.value)}
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label>비밀번호</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-        <button type="submit" className="signup-btn">회원가입</button>
-      </form>
+      </div>
     </div>
   );
 };

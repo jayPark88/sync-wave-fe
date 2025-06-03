@@ -12,8 +12,10 @@ import ProtectedRoute from "./components/auth/ProtectedRoute";
 import PasswordResetPage from "./pages/PasswordResetPage";
 import TodoListPage from "./pages/TodoListPage";
 import TodoDetailPage from "./pages/TodoDetailPage";
+import MyInfo from "./pages/MyInfo";
 import LoadingOverlay from "./components/common/LoadingOverlay";
 import { LoadingProvider } from "./contexts/LoadingContext";
+import { AuthProvider } from "./contexts/AuthContext";
 
 import "./styles/App.css";
 
@@ -31,60 +33,60 @@ function App() {
   }, []);
 
   return (
-    <LoadingProvider>
-      <Router>
-        <LoadingOverlay />
+    <AuthProvider>
+      <LoadingProvider>
+        <Router>
+          <LoadingOverlay />
 
-        <div
-          className="app-container"
-          style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}
-        >
-          {isAuthenticated && (
-            <Header
-              isAuthenticated={isAuthenticated}
-              setIsAuthenticated={setIsAuthenticated}
-            />
-          )}
+          <div className="app-container">
+            {isAuthenticated && (
+              <Header
+                isAuthenticated={isAuthenticated}
+                setIsAuthenticated={setIsAuthenticated}
+              />
+            )}
 
-          <div style={{ flex: 1, display: "flex" }}>
-            {isAuthenticated && <Sidebar />}
+            <div className="main-container">
+              {isAuthenticated && <Sidebar />}
 
-            <main style={{ flex: 1, padding: 20 }}>
-              <Routes>
-                {/* 로그인/회원가입/비밀번호 재설정 */}
-                <Route
-                  path="/login"
-                  element={
-                    isAuthenticated ? (
-                      <Navigate to="/" replace />
-                    ) : (
-                      <Login setIsAuthenticated={setIsAuthenticated} />
-                    )
-                  }
-                />
-                <Route path="/signup" element={<Signup />} />
-                <Route path="/password/reset" element={<PasswordResetPage />} />
+              <main className="content-container">
+                <Routes>
+                  {/* 로그인/회원가입/비밀번호 재설정 */}
+                  <Route
+                    path="/login"
+                    element={
+                      isAuthenticated ? (
+                        <Navigate to="/" replace />
+                      ) : (
+                        <Login setIsAuthenticated={setIsAuthenticated} />
+                      )
+                    }
+                  />
+                  <Route path="/signup" element={<Signup />} />
+                  <Route path="/password/reset" element={<PasswordResetPage />} />
 
-                {/* 보호된 라우트 */}
-                <Route element={<ProtectedRoute />}>
-                  <Route path="/" element={<Home />} />
-                  <Route path="/board" element={<Board />} />
+                  {/* 보호된 라우트 */}
+                  <Route element={<ProtectedRoute />}>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/board" element={<Board />} />
+                    <Route path="/my-info" element={<MyInfo />} />
 
-                  {/* To-Do 관련 페이지 */}
-                  <Route path="/todos" element={<TodoListPage />} />
-                  <Route path="/todos/:id" element={<TodoDetailPage />} />
-                </Route>
+                    {/* To-Do 관련 페이지 */}
+                    <Route path="/todos" element={<TodoListPage />} />
+                    <Route path="/todos/:id" element={<TodoDetailPage />} />
+                  </Route>
 
-                {/* 그 외 잘못된 경로는 홈으로 */}
-                <Route path="*" element={<Navigate to="/" replace />} />
-              </Routes>
-            </main>
+                  {/* 그 외 잘못된 경로는 홈으로 */}
+                  <Route path="*" element={<Navigate to="/" replace />} />
+                </Routes>
+              </main>
+            </div>
+
+            {isAuthenticated && <Footer />}
           </div>
-
-          {isAuthenticated && <Footer />}
-        </div>
-      </Router>
-    </LoadingProvider>
+        </Router>
+      </LoadingProvider>
+    </AuthProvider>
   );
 }
 
