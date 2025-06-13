@@ -23,6 +23,11 @@ const Sidebar = () => {
               할 일 목록
             </Link>
           </li>
+          <li className="nav-item">
+            <Link to="/schedules" className={`nav-link ${isActive('/schedules') ? 'active' : ''}`}>
+              스케줄
+            </Link>
+          </li>
         </ul>
       </nav>
     </aside>

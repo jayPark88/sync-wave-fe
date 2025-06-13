@@ -16,6 +16,7 @@ import MyInfo from "./pages/MyInfo";
 import LoadingOverlay from "./components/common/LoadingOverlay";
 import { LoadingProvider } from "./contexts/LoadingContext";
 import { AuthProvider } from "./contexts/AuthContext";
+import SchedulesPage from './pages/SchedulesPage';
 
 import "./styles/App.css";
 
@@ -75,6 +76,9 @@ function App() {
                     <Route path="/todos" element={<TodoListPage />} />
                     <Route path="/todos/:id" element={<TodoDetailPage />} />
                   </Route>
+
+                  {/* 스케줄 페이지 */}
+                  <Route path="/schedules" element={<SchedulesPage />} />
 
                   {/* 그 외 잘못된 경로는 홈으로 */}
                   <Route path="*" element={<Navigate to="/" replace />} />
