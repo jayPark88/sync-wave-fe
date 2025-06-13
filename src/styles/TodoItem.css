@@ -17,29 +17,52 @@
   box-shadow: var(--shadow-md);
 }
 
+.checkbox-wrapper {
+  display: flex;
+  align-items: center;
+  margin-right: var(--spacing-md);
+  cursor: pointer;
+}
+
 .todo-checkbox {
   width: 20px;
   height: 20px;
-  border-radius: 50%;
   border: 2px solid var(--color-border);
+  border-radius: 4px;
   cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  background-color: var(--color-background);
+  margin: 0;
+  transition: all 0.2s ease;
+}
+
+.todo-checkbox:checked {
+  background-color: var(--color-success);
+  border-color: var(--color-success);
   position: relative;
-  flex-shrink: 0;
 }
 
-.todo-checkbox.checked {
-  background-color: var(--color-primary);
-  border-color: var(--color-primary);
-}
-
-.todo-checkbox.checked::after {
+.todo-checkbox:checked::after {
   content: '✓';
   position: absolute;
   color: white;
-  font-size: 12px;
+  font-size: 14px;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+
+.todo-checkbox:disabled {
+  background-color: var(--color-background-secondary);
+  border-color: var(--color-text-tertiary);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.todo-checkbox:disabled:checked {
+  background-color: var(--color-text-tertiary);
+  border-color: var(--color-text-tertiary);
 }
 
 .todo-content {
@@ -52,6 +75,7 @@
   color: var(--color-text-primary);
   margin-bottom: var(--spacing-xs);
   transition: all 0.2s ease;
+  font-variant-numeric: normal;
 }
 
 .todo-task.completed {
@@ -111,6 +135,18 @@
 .todo-button.delete:hover {
   background-color: var(--color-error-alpha);
   color: var(--color-error);
+}
+
+.todo-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background-color: var(--color-background-secondary);
+  color: var(--color-text-tertiary);
+}
+
+.todo-button:disabled:hover {
+  background-color: var(--color-background-secondary);
+  color: var(--color-text-tertiary);
 }
 
 /* 상태별 스타일 */

@@ -3,22 +3,16 @@ import "../../styles/TodoForm.css"; // CSS 파일 추가
 
 function TodoForm({ onSubmit, initial = {} }) {
   const [task, setTask] = useState(initial.task || "");
-  const [startDate, setStartDate] = useState(initial.startDate || "");
-  const [dueDate, setDueDate] = useState(initial.dueDate || "");
 
   function handleSubmit(e) {
     e.preventDefault();
     onSubmit({
       id: initial.id || null,
       task,
-      startDate,
-      dueDate,
       status: initial.status || "PENDING"
     });
     if (!initial.id) {
       setTask("");
-      setStartDate("");
-      setDueDate("");
     }
   }
 
@@ -30,20 +24,6 @@ function TodoForm({ onSubmit, initial = {} }) {
         placeholder="새로운 할 일을 입력하세요"
         value={task}
         onChange={e => setTask(e.target.value)}
-        required
-      />
-      <input
-        type="date"
-        className="todo-input todo-input--date"
-        value={startDate}
-        onChange={e => setStartDate(e.target.value)}
-        required
-      />
-      <input
-        type="date"
-        className="todo-input todo-input--date"
-        value={dueDate}
-        onChange={e => setDueDate(e.target.value)}
         required
       />
       <button type="submit" className="todo-button">

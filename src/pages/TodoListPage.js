@@ -15,7 +15,7 @@ function TodoListPage() {
   const [todos, setTodos] = useState([]);
   const [error, setError] = useState("");
   const { setIsLoading } = useLoading();
-  const [filter, setFilter] = useState("all");
+  const [filter, setFilter] = useState("inProgress");
   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
@@ -27,7 +27,11 @@ function TodoListPage() {
     setIsLoading(true);
     try {
       const res = await fetchTodos();
-      setTodos(res.data.data);
+      if (res.data.result) {
+        setTodos(res.data.data);
+      } else {
+        setError(res.data.errorMessage || "데이터를 불러오는데 실패했습니다.");
+      }
     } catch (err) {
       console.error("목록 로드 오류:", err);
       setError("목록을 불러오지 못했습니다.");

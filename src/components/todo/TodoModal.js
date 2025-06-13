@@ -50,7 +50,6 @@ function TodoModal({ todo, onClose, onUpdate, onDelete }) {
     }
   };
 
-  // 현재 상태에 따라 선택 가능한 상태 옵션 결정
   const getStatusOptions = () => {
     if (["PENDING", "IN_PROGRESS"].includes(todo.status)) {
       return [
@@ -106,32 +105,6 @@ function TodoModal({ todo, onClose, onUpdate, onDelete }) {
             )}
           </div>
           <div className="detail-item">
-            <span className="detail-label">시작일</span>
-            {isEditing ? (
-              <input
-                type="date"
-                className="edit-input"
-                value={editedTodo.startDate}
-                onChange={(e) => setEditedTodo({ ...editedTodo, startDate: e.target.value })}
-              />
-            ) : (
-              <span className="detail-value">{formatDate(todo.startDate)}</span>
-            )}
-          </div>
-          <div className="detail-item">
-            <span className="detail-label">마감일</span>
-            {isEditing ? (
-              <input
-                type="date"
-                className="edit-input"
-                value={editedTodo.dueDate}
-                onChange={(e) => setEditedTodo({ ...editedTodo, dueDate: e.target.value })}
-              />
-            ) : (
-              <span className="detail-value">{formatDate(todo.dueDate)}</span>
-            )}
-          </div>
-          <div className="detail-item">
             <span className="detail-label">생성일</span>
             <span className="detail-value">
               {formatDate(todo.createdAt)}
@@ -176,6 +149,7 @@ function TodoModal({ todo, onClose, onUpdate, onDelete }) {
             <button 
               className="modal-button delete"
               onClick={handleDelete}
+              disabled={todo.status === "COMPLETED" || todo.status === "CANCELLED"}
             >
               삭제
             </button>

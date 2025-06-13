@@ -27,7 +27,7 @@
 }
 
 .todo-input--text {
-  flex: 2;
+  flex: 1;
   min-width: 200px;
 }
 

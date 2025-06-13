@@ -308,4 +308,16 @@
 .modal-button.cancel-status:hover {
   background-color: var(--color-text-tertiary);
   color: white;
+}
+
+.modal-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background-color: var(--color-background-secondary);
+  color: var(--color-text-tertiary);
+}
+
+.modal-button:disabled:hover {
+  background-color: var(--color-background-secondary);
+  color: var(--color-text-tertiary);
 } 
