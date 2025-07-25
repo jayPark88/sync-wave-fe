@@ -51,9 +51,16 @@ function TodoModal({ todo, onClose, onUpdate, onDelete }) {
   };
 
   const getStatusOptions = () => {
-    if (["PENDING", "IN_PROGRESS"].includes(todo.status)) {
+    if (todo.status === "PENDING") {
       return [
-        { value: todo.status, label: getStatusText(todo.status) },
+        { value: "PENDING", label: "대기 중" },
+        { value: "IN_PROGRESS", label: "진행 중" },
+        { value: "CANCELLED", label: "취소" }
+      ];
+    } else if (todo.status === "IN_PROGRESS") {
+      return [
+        { value: "IN_PROGRESS", label: "진행 중" },
+        { value: "COMPLETED", label: "완료" },
         { value: "CANCELLED", label: "취소" }
       ];
     }

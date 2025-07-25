@@ -1,0 +1,225 @@
+@import './variables.css';
+
+.schedule-item {
+  background: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-lg);
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.schedule-item:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.schedule-item.expired {
+  opacity: 0.8;
+  background-color: var(--color-background-secondary);
+}
+
+.schedule-item.expired:hover {
+  opacity: 1;
+}
+
+.schedule-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--spacing-md);
+}
+
+.schedule-title-section {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-xs);
+  flex: 1;
+}
+
+.schedule-header h3 {
+  font-size: var(--font-size-lg);
+  color: var(--color-text-primary);
+  margin: 0;
+  word-break: break-word;
+}
+
+.schedule-status {
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.schedule-status.ongoing {
+  background-color: var(--color-primary-alpha);
+  color: var(--color-primary-dark);
+}
+
+.schedule-status.expired {
+  background-color: var(--color-text-tertiary);
+  color: white;
+}
+
+.schedule-actions {
+  position: relative;
+  margin-left: var(--spacing-sm);
+}
+
+.action-button {
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: var(--border-radius-sm);
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+}
+
+.action-button:hover {
+  background-color: var(--color-background-secondary);
+  color: var(--color-text-primary);
+}
+
+.action-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-lg);
+  z-index: 10;
+  min-width: 120px;
+  overflow: hidden;
+  animation: slideDown 0.2s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.action-menu-item {
+  display: block;
+  width: 100%;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: none;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+  font-size: var(--font-size-sm);
+  transition: all 0.2s ease;
+  color: var(--color-text-primary);
+}
+
+.action-menu-item:hover {
+  background-color: var(--color-background-secondary);
+}
+
+.action-menu-item.edit:hover {
+  color: var(--color-primary);
+}
+
+.action-menu-item.delete:hover {
+  color: var(--color-error);
+}
+
+.schedule-date {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  display: block;
+  margin-bottom: var(--spacing-md);
+}
+
+.schedule-description {
+  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-md);
+  line-height: 1.5;
+  word-break: break-word;
+}
+
+.schedule-progress {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.progress-bar {
+  flex: 1;
+  height: 6px;
+  background: var(--color-background-secondary);
+  border-radius: var(--border-radius-sm);
+  overflow: hidden;
+}
+
+.progress {
+  height: 100%;
+  background: var(--color-primary);
+  transition: width 0.3s ease;
+}
+
+.schedule-item.expired .progress {
+  background: var(--color-text-tertiary);
+}
+
+.progress-text {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  min-width: 48px;
+  text-align: right;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  .schedule-item {
+    padding: var(--spacing-md);
+  }
+
+  .schedule-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--spacing-sm);
+  }
+
+  .schedule-title-section {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-xs);
+  }
+
+  .schedule-actions {
+    align-self: flex-end;
+    margin-left: 0;
+  }
+
+  .schedule-progress {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--spacing-xs);
+  }
+
+  .progress-text {
+    text-align: left;
+  }
+
+  .action-menu {
+    right: -8px;
+  }
+} 

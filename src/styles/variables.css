@@ -10,6 +10,9 @@
   --color-border: #E5E5E5;
   --color-error: #FF3B30;
   --color-success: #34C759;
+  --color-primary-dark: #E6CF00;
+  --color-primary-alpha: rgba(254, 229, 0, 0.2);
+  --color-error-alpha: rgba(255, 59, 48, 0.1);
 
   /* Spacing */
   --spacing-xs: 4px;
@@ -36,6 +39,7 @@
   --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
   --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
   --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.15);
 
   /* Layout */
   --header-height: 64px;
