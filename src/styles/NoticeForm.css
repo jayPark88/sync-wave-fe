@@ -190,6 +190,20 @@
   box-shadow: none;
 }
 
+/* 읽기 전용 필드 스타일 */
+.form-group input[readonly],
+.form-group textarea[readonly] {
+  background-color: var(--color-gray-light);
+  color: var(--color-text);
+  cursor: not-allowed;
+}
+
+.form-group select[disabled] {
+  background-color: var(--color-gray-light);
+  color: var(--color-text);
+  cursor: not-allowed;
+}
+
 /* 반응형 디자인 */
 @media (max-width: 768px) {
   .notice-form-overlay {

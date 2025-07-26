@@ -76,13 +76,13 @@ function App() {
                     {/* To-Do 관련 페이지 */}
                     <Route path="/todos" element={<TodoListPage />} />
                     <Route path="/todos/:id" element={<TodoDetailPage />} />
+                    
+                    {/* 스케줄 페이지 */}
+                    <Route path="/schedules" element={<SchedulesPage />} />
+                    
+                    {/* 공지사항 페이지 */}
+                    <Route path="/notices" element={<NoticePage />} />
                   </Route>
-
-                  {/* 스케줄 페이지 */}
-                  <Route path="/schedules" element={<SchedulesPage />} />
-                  
-                  {/* 공지사항 페이지 */}
-                  <Route path="/notices" element={<NoticePage />} />
 
                   {/* 그 외 잘못된 경로는 홈으로 */}
                   <Route path="*" element={<Navigate to="/" replace />} />

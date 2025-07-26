@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import '../../styles/NoticeForm.css';
 
-const NoticeForm = ({ notice, onSubmit, onCancel }) => {
+const NoticeForm = ({ notice, onSubmit, onCancel, userRole }) => {
   const [formData, setFormData] = useState({
     title: '',
     content: '',
     priority: 'MEDIUM'
   });
   const [errors, setErrors] = useState({});
+  
+  const isUser = userRole === 'ROLE_USER';
+  const isMaster = userRole === 'ROLE_MASTER';
 
   useEffect(() => {
     if (notice) {
@@ -69,7 +72,7 @@ const NoticeForm = ({ notice, onSubmit, onCancel }) => {
     <div className="notice-form-overlay">
       <div className="notice-form-modal">
         <div className="notice-form-header">
-          <h2>{notice ? '공지사항 수정' : '새 공지사항 작성'}</h2>
+          <h2>{notice ? (isUser ? '공지사항 상세보기' : '공지사항 수정') : '새 공지사항 작성'}</h2>
           <button 
             type="button" 
             className="close-button"
@@ -91,6 +94,7 @@ const NoticeForm = ({ notice, onSubmit, onCancel }) => {
               className={errors.title ? 'error' : ''}
               placeholder="공지사항 제목을 입력하세요"
               maxLength={200}
+              readOnly={isUser && notice}
             />
             {errors.title && <span className="error-message">{errors.title}</span>}
           </div>
@@ -103,6 +107,7 @@ const NoticeForm = ({ notice, onSubmit, onCancel }) => {
               value={formData.priority}
               onChange={handleChange}
               className={errors.priority ? 'error' : ''}
+              disabled={isUser && notice}
             >
               <option value="LOW">낮음</option>
               <option value="MEDIUM">보통</option>
@@ -122,6 +127,7 @@ const NoticeForm = ({ notice, onSubmit, onCancel }) => {
               placeholder="공지사항 내용을 입력하세요"
               rows={8}
               maxLength={2000}
+              readOnly={isUser && notice}
             />
             <div className="character-count">
               {formData.content.length}/2000
@@ -133,9 +139,12 @@ const NoticeForm = ({ notice, onSubmit, onCancel }) => {
             <button type="button" className="cancel-button" onClick={onCancel}>
               취소
             </button>
-            <button type="submit" className="submit-button">
-              {notice ? '수정' : '등록'}
-            </button>
+            {/* ROLE_USER는 수정 버튼 숨김 */}
+            {userRole !== 'ROLE_USER' && (
+              <button type="submit" className="submit-button">
+                {notice ? '수정' : '등록'}
+              </button>
+            )}
           </div>
         </form>
       </div>

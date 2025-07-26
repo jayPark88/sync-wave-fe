@@ -20,33 +20,46 @@ function NoticePage() {
   const [totalElements, setTotalElements] = useState(0);
   const [pageSize, setPageSize] = useState(10);
 
-  // 토큰이 있으면 마스터 권한 확인 (공지사항 관리용)
+  // 사용자 권한 확인
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      // 토큰에서 역할 정보 추출 (JWT 토큰의 payload에서)
+    const fetchUserRole = async () => {
       try {
-        const payload = JSON.parse(atob(token.split('.')[1]));
-        console.log('JWT Payload:', payload); // 디버깅용
-        // auth 필드에서 권한 정보 추출
-        const authorities = payload.auth;
-        if (authorities && authorities.includes('ROLE_MASTER')) {
-          setUserRole('ROLE_MASTER');
-        } else {
-          setUserRole(null);
-        }
+        const response = await NoticeService.getUserRole();
+        setUserRole(response.data);
+        console.log('사용자 권한:', response.data);
       } catch (error) {
-        console.log('토큰 파싱 실패:', error);
-        setUserRole(null);
+        console.error('권한 조회 실패:', error);
+        // 토큰에서 권한 정보 추출 (백업 방법)
+        const token = localStorage.getItem('token');
+        if (token) {
+          try {
+            const payload = JSON.parse(atob(token.split('.')[1]));
+            const authorities = payload.auth;
+            if (authorities && authorities.includes('ROLE_MASTER')) {
+              setUserRole('ROLE_MASTER');
+            } else {
+              setUserRole('ROLE_USER');
+            }
+          } catch (error) {
+            console.log('토큰 파싱 실패:', error);
+            setUserRole('ROLE_USER');
+          }
+        } else {
+          setUserRole('ROLE_USER');
+        }
       }
-    }
+    };
+
+    fetchUserRole();
   }, []);
 
   const isMaster = userRole === 'ROLE_MASTER';
+  const isUser = userRole === 'ROLE_USER';
   
   // 디버깅용 로그
   console.log('현재 사용자 역할:', userRole);
   console.log('마스터 권한 여부:', isMaster);
+  console.log('일반 사용자 여부:', isUser);
 
   useEffect(() => {
     fetchNotices();
@@ -86,6 +99,9 @@ function NoticePage() {
       
       const response = await NoticeService.getNotices(searchParams);
       const pageData = response.data;
+      
+      console.log('페이징 응답:', pageData);
+      console.log('현재 페이지:', currentPage, '페이지 크기:', pageSize);
       
       setNotices(pageData.content || []);
       setTotalPages(pageData.totalPages || 0);
@@ -134,6 +150,12 @@ function NoticePage() {
   };
 
   const handleEditNotice = (notice) => {
+    // ROLE_USER는 비활성화된 공지사항을 수정할 수 없음
+    if (isUser && !notice.isActive) {
+      alert('비활성화된 공지사항은 수정할 수 없습니다.');
+      return;
+    }
+    
     setEditingNotice(notice);
     setShowForm(true);
   };
@@ -207,7 +229,7 @@ function NoticePage() {
   const clearFilters = () => {
     setSearchTerm('');
     setPriorityFilter('');
-    setStatusFilter('active');
+    setStatusFilter(isMaster ? 'all' : 'active');
     setCurrentPage(0);
   };
   
@@ -249,35 +271,45 @@ function NoticePage() {
           />
         </div>
 
-        <div className="filter-section">
-          <select
-            value={priorityFilter}
-            onChange={(e) => setPriorityFilter(e.target.value)}
-            className="filter-select"
-          >
-            <option value="">모든 중요도</option>
-            <option value="HIGH">높음</option>
-            <option value="MEDIUM">보통</option>
-            <option value="LOW">낮음</option>
-          </select>
+                    <div className="filter-section">
+              <select
+                value={priorityFilter}
+                onChange={(e) => setPriorityFilter(e.target.value)}
+                className="filter-select"
+              >
+                <option value="">모든 중요도</option>
+                <option value="HIGH">높음</option>
+                <option value="MEDIUM">보통</option>
+                <option value="LOW">낮음</option>
+              </select>
 
-          <select
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
-            className="filter-select"
-          >
-            <option value="active">활성</option>
-            <option value="inactive">비활성</option>
-            <option value="all">모든 상태</option>
-          </select>
+              {isMaster ? (
+                <select
+                  value={statusFilter}
+                  onChange={(e) => setStatusFilter(e.target.value)}
+                  className="filter-select"
+                >
+                  <option value="active">활성</option>
+                  <option value="inactive">비활성</option>
+                  <option value="all">모든 상태</option>
+                </select>
+              ) : (
+                <select
+                  value={statusFilter}
+                  onChange={(e) => setStatusFilter(e.target.value)}
+                  className="filter-select"
+                >
+                  <option value="active">활성</option>
+                </select>
+              )}
 
-          <button 
-            className="clear-filters-button"
-            onClick={clearFilters}
-          >
-            필터 초기화
-          </button>
-        </div>
+              <button 
+                className="clear-filters-button"
+                onClick={clearFilters}
+              >
+                필터 초기화
+              </button>
+            </div>
         
         {isMaster && (
           <button 
@@ -310,7 +342,10 @@ function NoticePage() {
                     <tr key={notice.id}>
                       <td>{totalElements - (currentPage * pageSize + index)}</td>
                       <td className="title-cell">
-                        <div className="notice-title" onClick={() => handleEditNotice(notice)}>
+                        <div 
+                          className={`notice-title ${isUser && !notice.isActive ? 'disabled' : ''}`} 
+                          onClick={() => handleEditNotice(notice)}
+                        >
                           {notice.title}
                         </div>
                       </td>
@@ -328,7 +363,7 @@ function NoticePage() {
                       </td>
                       <td>{new Date(notice.createdDateTime).toLocaleDateString()}</td>
                       <td>
-                        {isMaster && (
+                        {isMaster ? (
                           <div className="action-buttons">
                             <button 
                               className="action-btn edit-btn"
@@ -347,6 +382,15 @@ function NoticePage() {
                               onClick={() => handleDeleteNotice(notice.id)}
                             >
                               삭제
+                            </button>
+                          </div>
+                        ) : (
+                          <div className="action-buttons">
+                            <button 
+                              className="action-btn view-btn"
+                              onClick={() => handleEditNotice(notice)}
+                            >
+                              상세보기
                             </button>
                           </div>
                         )}
@@ -379,18 +423,24 @@ function NoticePage() {
                   이전
                 </button>
                 
-                {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-                  const pageNum = Math.max(0, Math.min(totalPages - 1, currentPage - 2 + i));
-                  return (
-                    <button
-                      key={pageNum}
-                      className={`pagination-btn ${currentPage === pageNum ? 'active' : ''}`}
-                      onClick={() => handlePageChange(pageNum)}
-                    >
-                      {pageNum + 1}
-                    </button>
-                  );
-                })}
+                {(() => {
+                  const startPage = Math.max(0, currentPage - 2);
+                  const endPage = Math.min(totalPages - 1, startPage + 4);
+                  const pages = [];
+                  
+                  for (let i = startPage; i <= endPage; i++) {
+                    pages.push(
+                      <button
+                        key={i}
+                        className={`pagination-btn ${currentPage === i ? 'active' : ''}`}
+                        onClick={() => handlePageChange(i)}
+                      >
+                        {i + 1}
+                      </button>
+                    );
+                  }
+                  return pages;
+                })()}
                 
                 <button 
                   className="pagination-btn"
@@ -423,7 +473,7 @@ function NoticePage() {
           </>
         ) : (
           <div className="empty-state">
-            {searchTerm || priorityFilter || statusFilter !== 'active' ? (
+            {searchTerm || priorityFilter || (isMaster ? statusFilter !== 'all' : statusFilter !== 'active') ? (
               <>
                 <p>검색 조건에 맞는 공지사항이 없습니다.</p>
                 <button 
@@ -445,6 +495,7 @@ function NoticePage() {
           notice={editingNotice}
           onSubmit={handleSubmitNotice}
           onCancel={handleCancelForm}
+          userRole={userRole}
         />
       )}
     </div>

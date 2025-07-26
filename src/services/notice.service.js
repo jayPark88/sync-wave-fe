@@ -69,5 +69,16 @@ export const NoticeService = {
       console.error('공지사항 삭제 실패:', error);
       throw error;
     }
+  },
+
+  // 사용자 권한 조회
+  getUserRole: async () => {
+    try {
+      const response = await axios.get(`${NOTICE_API_BASE_URL}/user-role`);
+      return response.data;
+    } catch (error) {
+      console.error('사용자 권한 조회 실패:', error);
+      throw error;
+    }
   }
 }; 

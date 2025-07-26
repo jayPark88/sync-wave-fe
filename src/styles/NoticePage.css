@@ -173,6 +173,15 @@
   text-decoration: underline;
 }
 
+.notice-title.disabled {
+  color: var(--color-gray);
+  cursor: not-allowed;
+}
+
+.notice-title.disabled:hover {
+  text-decoration: none;
+}
+
 /* 배지 스타일 */
 .priority-badge, .status-badge {
   padding: 4px 8px;
@@ -182,28 +191,33 @@
 }
 
 .priority-high {
-  background-color: var(--color-danger);
+  background-color: #dc3545;
   color: white;
+  font-weight: 600;
 }
 
 .priority-medium {
-  background-color: var(--color-warning);
-  color: white;
+  background-color: #ffc107;
+  color: #212529;
+  font-weight: 600;
 }
 
 .priority-low {
-  background-color: var(--color-success);
+  background-color: #28a745;
   color: white;
+  font-weight: 600;
 }
 
 .status-active {
-  background-color: var(--color-success);
+  background-color: #28a745;
   color: white;
+  font-weight: 600;
 }
 
 .status-inactive {
-  background-color: var(--color-gray);
+  background-color: #6c757d;
   color: white;
+  font-weight: 600;
 }
 
 /* 액션 버튼 */
@@ -246,6 +260,15 @@
 
 .delete-btn:hover {
   background-color: var(--color-danger-dark);
+}
+
+.view-btn {
+  background-color: var(--color-primary);
+  color: white;
+}
+
+.view-btn:hover {
+  background-color: var(--color-primary-dark);
 }
 
 /* 페이징 스타일 */
