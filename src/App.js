@@ -17,6 +17,7 @@ import LoadingOverlay from "./components/common/LoadingOverlay";
 import { LoadingProvider } from "./contexts/LoadingContext";
 import { AuthProvider } from "./contexts/AuthContext";
 import SchedulesPage from './pages/SchedulesPage';
+import NoticePage from './pages/NoticePage';
 
 import "./styles/App.css";
 
@@ -79,6 +80,9 @@ function App() {
 
                   {/* 스케줄 페이지 */}
                   <Route path="/schedules" element={<SchedulesPage />} />
+                  
+                  {/* 공지사항 페이지 */}
+                  <Route path="/notices" element={<NoticePage />} />
 
                   {/* 그 외 잘못된 경로는 홈으로 */}
                   <Route path="*" element={<Navigate to="/" replace />} />

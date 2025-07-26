@@ -13,6 +13,11 @@
   --color-primary-dark: #E6CF00;
   --color-primary-alpha: rgba(254, 229, 0, 0.2);
   --color-error-alpha: rgba(255, 59, 48, 0.1);
+  --color-warning: #FF9500;
+  --color-warning-alpha: rgba(255, 149, 0, 0.1);
+  --color-success-alpha: rgba(52, 199, 89, 0.1);
+  --color-gray: #8E8E93;
+  --color-gray-light: #F2F2F7;
 
   /* Spacing */
   --spacing-xs: 4px;
