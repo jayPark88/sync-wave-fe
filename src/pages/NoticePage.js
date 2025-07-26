@@ -6,8 +6,6 @@ import '../styles/NoticePage.css';
 
 function NoticePage() {
   const [notices, setNotices] = useState([]);
-  // filteredNotices는 더 이상 필요하지 않음 (백엔드에서 필터링 처리)
-  // const [filteredNotices, setFilteredNotices] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [editingNotice, setEditingNotice] = useState(null);
@@ -15,6 +13,12 @@ function NoticePage() {
   const [priorityFilter, setPriorityFilter] = useState('');
   const [statusFilter, setStatusFilter] = useState('active');
   const [userRole, setUserRole] = useState(null);
+  
+  // 페이징 상태
+  const [currentPage, setCurrentPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+  const [totalElements, setTotalElements] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
 
   // 토큰이 있으면 마스터 권한 확인 (공지사항 관리용)
   useEffect(() => {
@@ -46,7 +50,7 @@ function NoticePage() {
 
   useEffect(() => {
     fetchNotices();
-  }, [searchTerm, priorityFilter, statusFilter]);
+  }, [searchTerm, priorityFilter, statusFilter, currentPage, pageSize]);
 
   // filterNotices 함수는 더 이상 필요하지 않으므로 제거
   // useEffect(() => {
@@ -58,7 +62,10 @@ function NoticePage() {
       setIsLoading(true);
       
       // 백엔드로 전달할 검색 조건 구성
-      const searchParams = {};
+      const searchParams = {
+        page: currentPage,
+        size: pageSize
+      };
       
       if (searchTerm.trim()) {
         searchParams.keyword = searchTerm.trim();
@@ -78,11 +85,17 @@ function NoticePage() {
       }
       
       const response = await NoticeService.getNotices(searchParams);
-      setNotices(response.data || []);
+      const pageData = response.data;
+      
+      setNotices(pageData.content || []);
+      setTotalPages(pageData.totalPages || 0);
+      setTotalElements(pageData.totalElements || 0);
     } catch (error) {
       console.error('공지사항 조회 실패:', error);
       // 에러가 발생해도 페이지는 유지하고 빈 배열로 설정
       setNotices([]);
+      setTotalPages(0);
+      setTotalElements(0);
     } finally {
       setIsLoading(false);
     }
@@ -194,7 +207,17 @@ function NoticePage() {
   const clearFilters = () => {
     setSearchTerm('');
     setPriorityFilter('');
-    setStatusFilter('all');
+    setStatusFilter('active');
+    setCurrentPage(0);
+  };
+  
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
+  };
+  
+  const handlePageSizeChange = (newSize) => {
+    setPageSize(newSize);
+    setCurrentPage(0); // 페이지 크기 변경 시 첫 페이지로 이동
   };
 
   if (isLoading && notices.length === 0) {
@@ -219,7 +242,7 @@ function NoticePage() {
         <div className="search-section">
           <input
             type="text"
-            placeholder="공지사항 검색..."
+            placeholder="제목 또는 내용으로 검색..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="search-input"
@@ -243,9 +266,9 @@ function NoticePage() {
             onChange={(e) => setStatusFilter(e.target.value)}
             className="filter-select"
           >
-            <option value="all">모든 상태</option>
             <option value="active">활성</option>
             <option value="inactive">비활성</option>
+            <option value="all">모든 상태</option>
           </select>
 
           <button 
@@ -268,21 +291,139 @@ function NoticePage() {
 
       <div className="notice-content">
         {notices.length > 0 ? (
-          <div className="notice-list">
-            {notices.map(notice => (
-              <NoticeItem
-                key={notice.id}
-                notice={notice}
-                onEdit={handleEditNotice}
-                onDelete={handleDeleteNotice}
-                onToggleStatus={handleToggleStatus}
-                isMaster={isMaster}
-              />
-            ))}
-          </div>
+          <>
+            <div className="notice-table">
+              <table>
+                <thead>
+                  <tr>
+                    <th>번호</th>
+                    <th>제목</th>
+                    <th>작성자</th>
+                    <th>중요도</th>
+                    <th>상태</th>
+                    <th>작성일</th>
+                    <th>관리</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {notices.map((notice, index) => (
+                    <tr key={notice.id}>
+                      <td>{totalElements - (currentPage * pageSize + index)}</td>
+                      <td className="title-cell">
+                        <div className="notice-title" onClick={() => handleEditNotice(notice)}>
+                          {notice.title}
+                        </div>
+                      </td>
+                      <td>{notice.createdBy}</td>
+                      <td>
+                        <span className={`priority-badge priority-${notice.priority.toLowerCase()}`}>
+                          {notice.priority === 'HIGH' ? '높음' : 
+                           notice.priority === 'MEDIUM' ? '보통' : '낮음'}
+                        </span>
+                      </td>
+                      <td>
+                        <span className={`status-badge status-${notice.isActive ? 'active' : 'inactive'}`}>
+                          {notice.isActive ? '활성' : '비활성'}
+                        </span>
+                      </td>
+                      <td>{new Date(notice.createdDateTime).toLocaleDateString()}</td>
+                      <td>
+                        {isMaster && (
+                          <div className="action-buttons">
+                            <button 
+                              className="action-btn edit-btn"
+                              onClick={() => handleEditNotice(notice)}
+                            >
+                              수정
+                            </button>
+                            <button 
+                              className="action-btn toggle-btn"
+                              onClick={() => handleToggleStatus(notice.id, !notice.isActive)}
+                            >
+                              {notice.isActive ? '비활성화' : '활성화'}
+                            </button>
+                            <button 
+                              className="action-btn delete-btn"
+                              onClick={() => handleDeleteNotice(notice.id)}
+                            >
+                              삭제
+                            </button>
+                          </div>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            
+            {/* 페이징 */}
+            <div className="pagination-container">
+              <div className="pagination-info">
+                총 {totalElements}개 중 {(currentPage * pageSize) + 1}-{Math.min((currentPage + 1) * pageSize, totalElements)}개
+              </div>
+              
+              <div className="pagination-controls">
+                <button 
+                  className="pagination-btn"
+                  disabled={currentPage === 0}
+                  onClick={() => handlePageChange(0)}
+                >
+                  처음
+                </button>
+                <button 
+                  className="pagination-btn"
+                  disabled={currentPage === 0}
+                  onClick={() => handlePageChange(currentPage - 1)}
+                >
+                  이전
+                </button>
+                
+                {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                  const pageNum = Math.max(0, Math.min(totalPages - 1, currentPage - 2 + i));
+                  return (
+                    <button
+                      key={pageNum}
+                      className={`pagination-btn ${currentPage === pageNum ? 'active' : ''}`}
+                      onClick={() => handlePageChange(pageNum)}
+                    >
+                      {pageNum + 1}
+                    </button>
+                  );
+                })}
+                
+                <button 
+                  className="pagination-btn"
+                  disabled={currentPage === totalPages - 1}
+                  onClick={() => handlePageChange(currentPage + 1)}
+                >
+                  다음
+                </button>
+                <button 
+                  className="pagination-btn"
+                  disabled={currentPage === totalPages - 1}
+                  onClick={() => handlePageChange(totalPages - 1)}
+                >
+                  마지막
+                </button>
+              </div>
+              
+              <div className="page-size-control">
+                <select 
+                  value={pageSize} 
+                  onChange={(e) => handlePageSizeChange(parseInt(e.target.value))}
+                  className="page-size-select"
+                >
+                  <option value={10}>10개씩</option>
+                  <option value={20}>20개씩</option>
+                  <option value={50}>50개씩</option>
+                </select>
+              </div>
+            </div>
+          </>
         ) : (
           <div className="empty-state">
-            {searchTerm || priorityFilter || statusFilter !== 'all' ? (
+            {searchTerm || priorityFilter || statusFilter !== 'active' ? (
               <>
                 <p>검색 조건에 맞는 공지사항이 없습니다.</p>
                 <button 

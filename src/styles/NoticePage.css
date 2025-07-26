@@ -13,7 +13,7 @@
 
 .notice-header h1 {
   font-size: 2.5rem;
-  color: var(--color-primary);
+  color: #000000;
   margin-bottom: 10px;
   font-weight: 700;
 }
@@ -117,10 +117,199 @@
   min-height: 400px;
 }
 
-.notice-list {
+/* 게시판 테이블 스타일 */
+.notice-table {
+  background: white;
+  border-radius: 12px;
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+.notice-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.notice-table th {
+  background-color: var(--color-primary);
+  color: white;
+  padding: 15px 10px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 16px;
+  height: 60px;
+  vertical-align: middle;
+}
+
+.notice-table td {
+  padding: 15px 10px;
+  border-bottom: 1px solid var(--color-border);
+  font-size: 16px;
+  vertical-align: middle;
+  height: 60px;
+}
+
+.notice-table tr:hover {
+  background-color: var(--color-background-light);
+}
+
+.title-cell {
+  max-width: 300px;
+  vertical-align: middle;
+}
+
+.notice-title {
+  cursor: pointer;
+  color: #000000;
+  font-weight: 500;
+  text-decoration: none;
+  font-size: 16px;
+  line-height: 1.5;
+  display: block;
+}
+
+.notice-title:hover {
+  text-decoration: underline;
+}
+
+/* 배지 스타일 */
+.priority-badge, .status-badge {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.priority-high {
+  background-color: var(--color-danger);
+  color: white;
+}
+
+.priority-medium {
+  background-color: var(--color-warning);
+  color: white;
+}
+
+.priority-low {
+  background-color: var(--color-success);
+  color: white;
+}
+
+.status-active {
+  background-color: var(--color-success);
+  color: white;
+}
+
+.status-inactive {
+  background-color: var(--color-gray);
+  color: white;
+}
+
+/* 액션 버튼 */
+.action-buttons {
   display: flex;
-  flex-direction: column;
-  gap: 20px;
+  gap: 5px;
+}
+
+.action-btn {
+  padding: 4px 8px;
+  border: none;
+  border-radius: 3px;
+  font-size: 14px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.edit-btn {
+  background-color: var(--color-primary);
+  color: white;
+}
+
+.edit-btn:hover {
+  background-color: var(--color-primary-dark);
+}
+
+.toggle-btn {
+  background-color: var(--color-warning);
+  color: white;
+}
+
+.toggle-btn:hover {
+  background-color: var(--color-warning-dark);
+}
+
+.delete-btn {
+  background-color: var(--color-danger);
+  color: white;
+}
+
+.delete-btn:hover {
+  background-color: var(--color-danger-dark);
+}
+
+/* 페이징 스타일 */
+.pagination-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+  padding: 15px 0;
+  border-top: 1px solid var(--color-border);
+}
+
+.pagination-info {
+  color: var(--color-text-secondary);
+  font-size: 16px;
+}
+
+.pagination-controls {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+
+.pagination-btn {
+  padding: 8px 12px;
+  border: 1px solid var(--color-border);
+  background-color: white;
+  color: var(--color-text);
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 16px;
+  min-width: 40px;
+}
+
+.pagination-btn:hover:not(:disabled) {
+  background-color: var(--color-primary);
+  color: white;
+  border-color: var(--color-primary);
+}
+
+.pagination-btn.active {
+  background-color: var(--color-primary);
+  color: white;
+  border-color: var(--color-primary);
+}
+
+.pagination-btn:disabled {
+  background-color: var(--color-gray-light);
+  color: var(--color-gray);
+  cursor: not-allowed;
+}
+
+.page-size-control {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.page-size-select {
+  padding: 6px 10px;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  font-size: 16px;
+  background-color: white;
 }
 
 .empty-state {
@@ -184,6 +373,24 @@
 
   .add-notice-button {
     width: 100%;
+  }
+  
+  .notice-table {
+    overflow-x: auto;
+  }
+  
+  .notice-table table {
+    min-width: 600px;
+  }
+  
+  .pagination-container {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .pagination-controls {
+    flex-wrap: wrap;
+    justify-content: center;
   }
 }
 
