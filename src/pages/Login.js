@@ -1,64 +1,88 @@
 import React, { useState, useContext } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
-import axios from "../util/axiosInstance";
-import { AuthContext } from "../contexts/AuthContext"; // AuthContext 가져오기
+import { useNavigate } from "react-router-dom";
+import ForgotPasswordPopup from "../components/ForgotPasswordPopup";
+import { useLoading } from "../contexts/LoadingContext";
+import { AuthContext } from "../contexts/AuthContext";
+import "../styles/Login.css";
 
-function Login() {
-  const [formData, setFormData] = useState({
-    userId: "",
-    password: "",
-  });
-  const [error, setError] = useState(null); // 에러 메시지 상태 관리
-  const { login } = useContext(AuthContext); // AuthContext의 login 함수 가져오기
-  const navigate = useNavigate(); // 페이지 이동을 위한 훅
-  const location = useLocation(); // 로그인 이전 경로 정보 가져오기
-
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+const Login = ({ setIsAuthenticated }) => {
+  const [userId, setUserId] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [showPopup, setShowPopup] = useState(false);
+  const { setIsLoading } = useLoading();
+  const { login } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(null); // 제출 시 이전 에러 상태 초기화
+    setIsLoading(true);
+    setError("");
+    
     try {
-      const response = await axios.post("/v1/auth/login", formData); // API 호출
-      const token = response.data.data.token; // 토큰 가져오기
-      localStorage.setItem("token", token); // 로컬 스토리지에 토큰 저장
-      login({ email: formData.userId }); // AuthContext를 통해 로그인 상태 업데이트
-      const from = location.state?.from?.pathname || "/"; // 이전 경로가 없으면 기본 경로로 설정
-      navigate(from, { replace: true }); // 성공 시 리다이렉트
+      const success = await login(userId, password);
+      if (success) {
+        setIsAuthenticated(true);
+        navigate("/");
+      } else {
+        setError("로그인에 실패했습니다. 아이디와 비밀번호를 확인해주세요.");
+      }
     } catch (error) {
-      setError("Login failed. Please check your credentials."); // 에러 메시지 설정
+      console.error("로그인 실패:", error);
+      setError("로그인에 실패했습니다. 아이디와 비밀번호를 확인해주세요.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
-    <div>
-      <h2>Login</h2>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          name="userId"
-          placeholder="Email"
-          value={formData.userId}
-          onChange={handleChange}
-          required
-        />
-        <br />
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={formData.password}
-          onChange={handleChange}
-          required
-        />
-        <br />
-        <button type="submit">Login</button>
-      </form>
-      {error && <p style={{ color: "red" }}>{error}</p>} {/* 에러 메시지 표시 */}
+    <div className="login-container">
+      <div className="login-card">
+        <h2>SyncWave</h2>
+        <p className="login-subtitle">간편하게 로그인하고 시작하세요</p>
+
+        <form onSubmit={handleSubmit} className="login-form">
+          <div className="input-group">
+            <label htmlFor="email">이메일</label>
+            <input
+              id="email"
+              type="email"
+              value={userId}
+              onChange={(e) => setUserId(e.target.value)}
+              placeholder="이메일을 입력하세요"
+              required
+            />
+          </div>
+
+          <div className="input-group">
+            <label htmlFor="password">비밀번호</label>
+            <input
+              id="password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="비밀번호를 입력하세요"
+              required
+            />
+          </div>
+
+          {error && <p className="login-error">{error}</p>}
+
+          <button type="submit" className="login-button">
+            로그인
+          </button>
+        </form>
+
+        <div className="login-links">
+          <span onClick={() => setShowPopup(true)}>비밀번호 찾기</span>
+          <span> · </span>
+          <a href="/signup">회원가입</a>
+        </div>
+      </div>
+
+      {showPopup && <ForgotPasswordPopup onClose={() => setShowPopup(false)} />}
     </div>
   );
-}
+};
 
 export default Login;

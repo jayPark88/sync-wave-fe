@@ -1,0 +1,118 @@
+@import './variables.css';
+
+/* 로그인 페이지 컨테이너 */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: var(--color-background-secondary);
+    padding: var(--spacing-lg);
+  }
+  
+  /* 로그인 카드 스타일 */
+  .login-card {
+    background: var(--color-background);
+    padding: var(--spacing-xxl);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-md);
+    text-align: center;
+    width: 100%;
+    max-width: 460px;
+  }
+  
+  /* 제목 스타일 */
+  .login-card h2 {
+    margin-bottom: var(--spacing-xs);
+    font-size: var(--font-size-xl);
+    color: var(--color-text-primary);
+    font-weight: 700;
+  }
+  
+  .login-subtitle {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-md);
+    margin-bottom: var(--spacing-xl);
+  }
+  
+  /* 입력 필드 스타일 */
+  .input-group {
+    margin-bottom: var(--spacing-md);
+    text-align: left;
+  }
+  
+  .input-group label {
+    display: block;
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    margin-bottom: var(--spacing-xs);
+    color: var(--color-text-primary);
+  }
+  
+  .input-group input {
+    width: 100%;
+    padding: var(--spacing-md);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-md);
+    font-size: var(--font-size-md);
+    transition: all 0.2s ease;
+  }
+  
+  .input-group input:focus {
+    border-color: var(--color-primary);
+    outline: none;
+    box-shadow: var(--shadow-sm);
+  }
+  
+  /* 에러 메시지 스타일 */
+  .login-error {
+    color: var(--color-error);
+    font-size: var(--font-size-sm);
+    margin-bottom: var(--spacing-md);
+  }
+  
+  /* 로그인 버튼 */
+  .login-button {
+    width: 100%;
+    background: var(--color-primary);
+    color: var(--color-secondary);
+    padding: var(--spacing-md);
+    border: none;
+    border-radius: var(--border-radius-md);
+    font-size: var(--font-size-md);
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease;
+  }
+  
+  .login-button:hover {
+    background: #EBD400;
+  }
+  
+  /* 추가 링크 스타일 */
+  .login-links {
+    margin-top: var(--spacing-lg);
+    font-size: var(--font-size-sm);
+    color: var(--color-text-tertiary);
+  }
+  
+  .login-links span,
+  .login-links a {
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    cursor: pointer;
+    transition: color 0.2s ease;
+  }
+  
+  .login-links span:hover,
+  .login-links a:hover {
+    color: var(--color-text-primary);
+  }
+  
+  /* 반응형 디자인 */
+  @media (max-width: 768px) {
+    .login-card {
+      padding: var(--spacing-lg);
+    }
+  }
+  

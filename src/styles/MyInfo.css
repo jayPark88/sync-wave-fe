@@ -1,0 +1,117 @@
+@import './variables.css';
+
+/* MyInfo Page Styles */
+.my-info-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - var(--header-height));
+  padding: var(--spacing-lg);
+}
+
+.my-info-card {
+  background: var(--color-background);
+  padding: var(--spacing-xxl);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-md);
+  width: 100%;
+  max-width: 460px;
+}
+
+.my-info-title {
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-xs);
+  text-align: center;
+}
+
+.my-info-subtitle {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-md);
+  margin-bottom: var(--spacing-xl);
+  text-align: center;
+}
+
+.my-info-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.form-group {
+  margin-bottom: var(--spacing-md);
+}
+
+.form-group label {
+  display: block;
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  margin-bottom: var(--spacing-xs);
+  color: var(--color-text-primary);
+}
+
+.form-group input {
+  width: 100%;
+  padding: var(--spacing-md);
+  font-size: var(--font-size-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-md);
+  transition: all 0.2s ease;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-sm);
+}
+
+.form-group input:disabled {
+  background-color: var(--color-background-secondary);
+  cursor: not-allowed;
+}
+
+.update-btn {
+  width: 100%;
+  background: var(--color-primary);
+  color: var(--color-secondary);
+  padding: var(--spacing-md);
+  font-size: var(--font-size-md);
+  font-weight: 600;
+  border: none;
+  border-radius: var(--border-radius-md);
+  cursor: pointer;
+  transition: background 0.2s ease;
+  margin-top: var(--spacing-lg);
+}
+
+.update-btn:hover {
+  background: #EBD400;
+}
+
+.update-message {
+  margin-top: var(--spacing-md);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--border-radius-sm);
+  font-size: var(--font-size-sm);
+  text-align: center;
+}
+
+.update-message.success {
+  background-color: var(--color-success);
+  color: var(--color-background);
+}
+
+.update-message.error {
+  background-color: var(--color-error);
+  color: var(--color-background);
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  .my-info-card {
+    padding: var(--spacing-lg);
+  }
+}
+  
