@@ -121,32 +121,6 @@ function NoticePage() {
     }
   };
 
-  // filterNotices 함수는 더 이상 필요하지 않음 (백엔드에서 필터링 처리)
-  // const filterNotices = () => {
-  //   let filtered = [...notices];
-
-  //   // 검색어 필터링
-  //   if (searchTerm.trim()) {
-  //     filtered = filtered.filter(notice =>
-  //       notice.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-  //       notice.content.toLowerCase().includes(searchTerm.toLowerCase())
-  //   );
-  //   }
-
-  //   // 중요도 필터링
-  //   if (priorityFilter) {
-  //     filtered = filtered.filter(notice => notice.priority === priorityFilter);
-  //   }
-
-  //   // 상태 필터링
-  //   if (statusFilter === 'active') {
-  //     filtered = filtered.filter(notice => notice.isActive);
-  //   } else if (statusFilter === 'inactive') {
-  //     filtered = filtered.filter(notice => !notice.isActive);
-  //   }
-
-  //   setFilteredNotices(filtered);
-  // };
 
   const handleCreateNotice = () => {
     setEditingNotice(null);
