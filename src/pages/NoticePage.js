@@ -11,7 +11,7 @@ function NoticePage() {
   const [editingNotice, setEditingNotice] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [priorityFilter, setPriorityFilter] = useState('');
-  const [statusFilter, setStatusFilter] = useState('active');
+  const [statusFilter, setStatusFilter] = useState('all');
   const [userRole, setUserRole] = useState(null);
   
   // 페이징 상태
@@ -25,8 +25,10 @@ function NoticePage() {
     const fetchUserRole = async () => {
       try {
         const response = await NoticeService.getUserRole();
-        setUserRole(response.data);
-        console.log('사용자 권한:', response.data);
+        // NoticeService에서 { data: string } 형태로 반환
+        const role = response.data;
+        setUserRole(role);
+        console.log('사용자 권한:', role);
       } catch (error) {
         console.error('권한 조회 실패:', error);
         // 토큰에서 권한 정보 추출 (백업 방법)
@@ -63,7 +65,9 @@ function NoticePage() {
 
   useEffect(() => {
     fetchNotices();
-  }, [searchTerm, priorityFilter, statusFilter, currentPage, pageSize]);
+  }, [priorityFilter, statusFilter, currentPage, pageSize]);
+  
+  // 검색어는 수동 검색으로 변경 (엔터 또는 검색 버튼 클릭 시)
 
   // filterNotices 함수는 더 이상 필요하지 않으므로 제거
   // useEffect(() => {
@@ -75,6 +79,7 @@ function NoticePage() {
       setIsLoading(true);
       
       // 백엔드로 전달할 검색 조건 구성
+      // API 스펙: NoticeSearchDto { title, content, keyword, priority, isActive, page, size }
       const searchParams = {
         page: currentPage,
         size: pageSize
@@ -92,12 +97,11 @@ function NoticePage() {
         searchParams.isActive = true;
       } else if (statusFilter === 'inactive') {
         searchParams.isActive = false;
-      } else if (statusFilter === 'all') {
-        // 모든 상태일 때는 isActive 파라미터를 명시적으로 null로 설정
-        searchParams.isActive = null;
       }
+      // statusFilter === 'all'일 때는 isActive 파라미터를 전달하지 않음
       
       const response = await NoticeService.getNotices(searchParams);
+      // NoticeService에서 { data: PageNoticeEntity } 형태로 반환
       const pageData = response.data;
       
       console.log('페이징 응답:', pageData);
@@ -117,32 +121,6 @@ function NoticePage() {
     }
   };
 
-  // filterNotices 함수는 더 이상 필요하지 않음 (백엔드에서 필터링 처리)
-  // const filterNotices = () => {
-  //   let filtered = [...notices];
-
-  //   // 검색어 필터링
-  //   if (searchTerm.trim()) {
-  //     filtered = filtered.filter(notice =>
-  //       notice.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-  //       notice.content.toLowerCase().includes(searchTerm.toLowerCase())
-  //   );
-  //   }
-
-  //   // 중요도 필터링
-  //   if (priorityFilter) {
-  //     filtered = filtered.filter(notice => notice.priority === priorityFilter);
-  //   }
-
-  //   // 상태 필터링
-  //   if (statusFilter === 'active') {
-  //     filtered = filtered.filter(notice => notice.isActive);
-  //   } else if (statusFilter === 'inactive') {
-  //     filtered = filtered.filter(notice => !notice.isActive);
-  //   }
-
-  //   setFilteredNotices(filtered);
-  // };
 
   const handleCreateNotice = () => {
     setEditingNotice(null);
@@ -172,7 +150,13 @@ function NoticePage() {
       alert('공지사항이 삭제되었습니다.');
     } catch (error) {
       console.error('공지사항 삭제 실패:', error);
-      alert('공지사항 삭제에 실패했습니다.');
+      let errorMessage = '공지사항 삭제에 실패했습니다.';
+      if (error.response && error.response.data && error.response.data.errorMessage) {
+        errorMessage = error.response.data.errorMessage;
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+      alert(errorMessage);
     } finally {
       setIsLoading(false);
     }
@@ -181,12 +165,19 @@ function NoticePage() {
   const handleToggleStatus = async (noticeId, isActive) => {
     try {
       setIsLoading(true);
+      // API 스펙: PATCH /v1/notices/{noticeId}/status?isActive={boolean}
       await NoticeService.updateNoticeStatus(noticeId, isActive);
       await fetchNotices();
       alert(`공지사항이 ${isActive ? '활성화' : '비활성화'}되었습니다.`);
     } catch (error) {
       console.error('공지사항 상태 변경 실패:', error);
-      alert('공지사항 상태 변경에 실패했습니다.');
+      let errorMessage = '공지사항 상태 변경에 실패했습니다.';
+      if (error.response && error.response.data && error.response.data.errorMessage) {
+        errorMessage = error.response.data.errorMessage;
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+      alert(errorMessage);
     } finally {
       setIsLoading(false);
     }
@@ -196,6 +187,7 @@ function NoticePage() {
     try {
       setIsLoading(true);
       
+      // API 스펙: NoticeDto { title, content, priority } - 모두 required
       if (editingNotice) {
         await NoticeService.updateNotice(editingNotice.id, noticeData);
         alert('공지사항이 수정되었습니다.');
@@ -210,8 +202,14 @@ function NoticePage() {
     } catch (error) {
       console.error('공지사항 저장 실패:', error);
       let errorMessage = '공지사항 저장에 실패했습니다.';
-      if (error.response && error.response.data && error.response.data.errorMessage) {
-        errorMessage = error.response.data.errorMessage;
+      // CommonResponse 구조의 에러 메시지 처리
+      if (error.response && error.response.data) {
+        const errorData = error.response.data;
+        if (errorData.errorMessage) {
+          errorMessage = errorData.errorMessage;
+        } else if (errorData.message) {
+          errorMessage = errorData.message;
+        }
       } else if (error.message) {
         errorMessage = error.message;
       }
@@ -229,7 +227,7 @@ function NoticePage() {
   const clearFilters = () => {
     setSearchTerm('');
     setPriorityFilter('');
-    setStatusFilter(isMaster ? 'all' : 'active');
+    setStatusFilter('all');
     setCurrentPage(0);
   };
   
@@ -240,6 +238,19 @@ function NoticePage() {
   const handlePageSizeChange = (newSize) => {
     setPageSize(newSize);
     setCurrentPage(0); // 페이지 크기 변경 시 첫 페이지로 이동
+  };
+  
+  // 검색 실행 핸들러
+  const handleSearch = () => {
+    setCurrentPage(0); // 검색 시 첫 페이지로 이동
+    fetchNotices();
+  };
+  
+  // 엔터 키 핸들러
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      handleSearch();
+    }
   };
 
   if (isLoading && notices.length === 0) {
@@ -264,9 +275,10 @@ function NoticePage() {
         <div className="search-section">
           <input
             type="text"
-            placeholder="제목 또는 내용으로 검색..."
+            placeholder="제목 또는 내용으로 검색... (엔터 키로 검색)"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
+            onKeyPress={handleKeyPress}
             className="search-input"
           />
         </div>
@@ -283,25 +295,15 @@ function NoticePage() {
                 <option value="LOW">낮음</option>
               </select>
 
-              {isMaster ? (
-                <select
-                  value={statusFilter}
-                  onChange={(e) => setStatusFilter(e.target.value)}
-                  className="filter-select"
-                >
-                  <option value="active">활성</option>
-                  <option value="inactive">비활성</option>
-                  <option value="all">모든 상태</option>
-                </select>
-              ) : (
-                <select
-                  value={statusFilter}
-                  onChange={(e) => setStatusFilter(e.target.value)}
-                  className="filter-select"
-                >
-                  <option value="active">활성</option>
-                </select>
-              )}
+              <select
+                value={statusFilter}
+                onChange={(e) => setStatusFilter(e.target.value)}
+                className="filter-select"
+              >
+                <option value="all">전체</option>
+                <option value="active">활성</option>
+                <option value="inactive">비활성</option>
+              </select>
 
               <button 
                 className="clear-filters-button"
@@ -473,7 +475,7 @@ function NoticePage() {
           </>
         ) : (
           <div className="empty-state">
-            {searchTerm || priorityFilter || (isMaster ? statusFilter !== 'all' : statusFilter !== 'active') ? (
+            {searchTerm || priorityFilter || statusFilter !== 'all' ? (
               <>
                 <p>검색 조건에 맞는 공지사항이 없습니다.</p>
                 <button 

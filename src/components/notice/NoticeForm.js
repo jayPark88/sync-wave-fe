@@ -14,12 +14,22 @@ const NoticeForm = ({ notice, onSubmit, onCancel, userRole }) => {
 
   useEffect(() => {
     if (notice) {
+      // 수정 모드: 기존 공지사항 데이터 로드
       setFormData({
         title: notice.title || '',
         content: notice.content || '',
         priority: notice.priority || 'MEDIUM'
       });
+    } else {
+      // 생성 모드: 폼 초기화
+      setFormData({
+        title: '',
+        content: '',
+        priority: 'MEDIUM'
+      });
     }
+    // 에러 메시지도 초기화
+    setErrors({});
   }, [notice]);
 
   const handleChange = (e) => {
